@@ -68,3 +68,19 @@ public class Main{
 //11 is bad
 //21 is good
 
+
+//Quiz Question *******************************************************************************************************************
+int main(){
+    int a, b, c, d;
+    cin>>a>>b>>c>>d;
+    cout<<(max(a,b), max(c,d))<<endl;
+    cout<<(min(a,b), min(c,d))<<endl;
+    return 0;   
+}
+
+//OUTPUT
+//max(c, d)
+//min(c, d)            because commma separation m second expression is evaluated
+
+
+
