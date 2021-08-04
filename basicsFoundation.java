@@ -233,5 +233,108 @@ public static void main(String[] args) {
  }
 
 //Rotate A Number
+public static void main(String[] args) {
+        // if k > no. of digits -> k = k % digits
+        // if k < 0 -> (k + digits) % digits
+        
+        //     find modulo of no. with 10/100/1000... no. of zeroes = k, store the remainder and update the no.
+        //     first print the remainder and then the no.
+        
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        
+        int digits = 0;
+        int m = n;
+        while(m > 0){
+            m /= 10;
+            digits++;
+        }
+        
+        
+        if(k > digits){
+            k = k % digits;
+        }
+        if(k < 0){
+            k = -(Math.abs(k) % digits) + digits;
+        }
+        
+            int div = (int)Math.pow(10, k);
+            int r = n % div;
+            n = n / div;
+            if(r == 0){
+                System.out.print(n);
+                return;
+            }
+            if(n == 0){
+                System.out.print(r);
+                return;
+            }
+                
+            System.out.print(r+""+n);
+         
+    }
+// Another approach for this program is to multiply the remainder with remaining no.of digits of the no.
+//     and then adding the quotient(remaining digits of number to updated value of remainder) ans = r*10^power + quotient
 
 
+//Gcd And Lcm
+public static void main(String[] args) {
+        // for gcd -> we'll make one no. as divisor and 
+        // another as dividend 
+        // then we'll divide them and if remainder is left
+        // we'll use that remainder as divisor for next calculation and previous divisor as dividend for further calculations
+        // when remainder comes zero we make that divisor as gcd
+        
+        //for lcm we'll use the formula gcd*lcm=n1*n2
+        
+        Scanner sc = new Scanner(System.in);
+        int n1= sc.nextInt();
+        int n2= sc.nextInt();
+        
+        int m1 = n1;
+        int m2 = n2;
+        
+        while(m1 % m2 != 0){
+            int r = m1%m2;
+            m1 = m2;
+            m2 = r;
+            
+        }
+        
+        int gcd = m2;
+        int lcm = (n1 * n2)/gcd;
+        
+        System.out.println(gcd);
+        System.out.println(lcm);
+        
+     }
+
+
+//Prime Factorisation Of A Number (see video on youtube for explanation)
+public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        
+        for(int div = 2; div * div <= n; div++){
+            while(n % div == 0){
+                System.out.print(div + " ");
+                n = n / div;
+            }
+            
+        }
+        if(n != 0)
+            System.out.print(n);
+ }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
