@@ -327,6 +327,128 @@ public static void main(String[] args) {
             System.out.print(n);
  }
 
+
+//Pythagorean Triplet
+public static void main(String[] args) {
+        // hypotenuese is the longest side also 
+        // H2 = P2 + B2
+        // we'll find max of a, b, c
+        // and compare max^2 to remaining sides square ka sum
+        Scanner sc = new Scanner(System.in);
+        int a = sc.nextInt();
+        int b = sc.nextInt();
+        int c = sc.nextInt();
+        
+        int hpt = Math.max(Math.max(a, b), c);
+        
+        //imp
+        int a2 = (int)Math.pow(a, 2);
+        int b2 = (int)Math.pow(b, 2);
+        int c2 = (int)Math.pow(c, 2);
+        int hpt2 = (int)Math.pow(hpt, 2);
+        
+        if(hpt2 == (a2 + b2 + c2 - hpt2)){
+            System.out.println("true");
+            return;
+        }
+        
+        System.out.println("false");
+        
+   }
+
+
+//The Curious Case Of Benjamin Bulbs
+public static void main(String[] args) {
+        // by seeing the pattern in Dry Run
+        // we saw that odd no. of fluctuations are
+        // giving on bulb
+        // so numbers which have odd no. of factors 
+        // will be on 
+        // and only perfect squares have odd no. of 
+        // factors and rest all have even factors
+        // we also inferred this by looking at on no. bulbs 
+        // in dry run
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        for(int i = 1; i*i <= n; i++){
+            System.out.println(i*i);
+        }
+   }
+
+
+//Digit Frequency
+public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        int n = scn.nextInt();
+        int d = scn.nextInt();
+        int f = getDigitFrequency(n, d);
+        System.out.println(f);
+    }
+
+    public static int getDigitFrequency(int n, int d) {
+        //we'll find each digit by taking modulo
+        // with 10
+        // if d = remainder found count++ 
+        // update n by dividing by 10
+        
+        int count = 0;
+        while(n > 0){
+            int r = n%10;
+            if(r == d)
+                count++;
+            n = n / 10;
+        }
+        return count;
+    }
+
+//Decimal To Any Base
+public static void main(String[] args) {
+      Scanner scn = new Scanner(System.in);
+      int n = scn.nextInt();
+      int b = scn.nextInt();
+      int dn = getValueInBase(n, b);
+      System.out.println(dn);
+   }
+  
+   public static int getValueInBase(int n, int b){
+       //divide by that to which needs to be converted
+       //multiply the remainder with given base^no. of times division -1 and add in ans
+       int count = 0;
+       int ans = 0;
+       while(n > 0){
+           int r = n % b;
+           ans += r * ((int)Math.pow(10, count));
+           n /= b;
+           count++;
+       }
+       return ans;
+   }
+
+//Any Base To Decimal
+public static void main(String[] args) {
+      Scanner scn = new Scanner(System.in);
+      int n = scn.nextInt();
+      int b = scn.nextInt();
+      int d = getValueIndecimal(n, b);
+      System.out.println(d);
+   }
+  
+   public static int getValueIndecimal(int n, int b){
+      //divide by 10 (that to which needs to be converted)
+       //multiply the remainder with given base^no. of times division -1 and add in ans
+       int count = 0, ans = 0;
+        while(n > 0){
+            int r = n % 10;
+            ans += r * ((int)Math.pow(b, count));
+            n /= 10;
+            count++;
+        }
+        return ans;
+   }
+
+//Any Base To Any Base
+
+
     
     
     
