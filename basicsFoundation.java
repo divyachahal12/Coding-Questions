@@ -447,9 +447,45 @@ public static void main(String[] args) {
    }
 
 //Any Base To Any Base
-
-
-    
+public class Main{
+      //convert from base1 to decimal
+      //decimal to base2
+  
+  public static void main(String[] args) {
+      Scanner scn = new Scanner(System.in);
+      int n = scn.nextInt();
+      int sourceBase = scn.nextInt();
+     int  destBase= scn.nextInt();
+     int a = b2d(sourceBase, n);
+     int ans = d2b(destBase, a);
+     System.out.println(ans);
+   }
+   public static int b2d(int b1, int n){
+      
+       int sum = 0;
+        int count = 0;
+       while(n > 0){
+           int r = n % 10;
+           n = n/10;
+           sum += r*((int)Math.pow(b1, count));
+           count++;
+           
+       }
+       return sum;
+   }
+   
+   public static int d2b(int b2, int n){
+       int sum = 0, count = 0;
+       while(n > 0){
+           int r = n % b2;
+           n /= b2;
+           sum += r * (int)Math.pow(10, count);
+           count++;
+       }
+       return sum;
+       
+   }
+  }
     
     
     
