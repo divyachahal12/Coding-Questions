@@ -487,6 +487,136 @@ public class Main{
    }
   }
     
+//Any Base Addition
+public static void main(String[] args) {
+      Scanner scn = new Scanner(System.in);
+      int b = scn.nextInt();
+      int n1 = scn.nextInt();
+      int n2 = scn.nextInt();
+  
+      int d = getSum(b, n1, n2);
+      System.out.println(d);
+   }
+  
+   public static int getSum(int b, int n1, int n2){
+      
+       int ans = 0, count= 0, carry = 0;
+       while(n1 > 0 || n2 > 0 || carry > 0){
+           
+           int r1 = n1 % 10;
+           int r2 = n2 % 10;
+           int s = r1 + r2 + carry;
+           
+           
+          if(s < b){
+              carry = 0;
+              ans += s * ((int)Math.pow(10, count));
+          }else{
+              int s1 = s % b;
+              carry = s / b;
+              ans += s1 * ((int)Math.pow(10, count));
+          }
+           n1 /= 10;
+           n2 /= 10;
+           count++;
+       }
+       return ans;
+   }
+// editorial
+public static int getSum(int b, int n1, int n2) {
+    int rv = 0;
+    int p = 1;
+    int c = 0;
+    while ( n1 > 0 || n2 > 0 || c > 0) //while numbers are not-nero or carry is non-zero
+    {
+      int d1 = n1 % 10; //extracting digits
+      int d2 = n2 % 10;
+      int d = d1 + d2 + c; //adding up extracted digits
+      c = d / b; //storing carry for next addition
+      d = d % b;
+      rv += d * p;
+      p *= 10;
+      n1 /= 10;
+      n2 /= 10;
+    }
+    return rv;
+  }
+
+//Any Base Subtraction
+public static void main(String[] args) {
+      Scanner scn = new Scanner(System.in);
+      int b = scn.nextInt();
+      int n1 = scn.nextInt();
+      int n2 = scn.nextInt();
+  
+      int d = getDifference(b, n1, n2);
+      System.out.println(d);
+   }
+  
+   public static int getDifference(int b, int n1, int n2){
+        int ans = 0, carry = 0, count = 0;
+        while(n1 > 0 || n2 > 0){
+            int r1 = n1 % 10;
+            int r2 = (n2 % 10)+carry;
+            
+            if((r2-r1) < 0){
+                ans += (r2 - r1 +b)*((int)Math.pow(10, count));
+                carry = -1;
+            }else{
+                carry = 0;
+                ans += (r2 - r1)*((int)Math.pow(10, count));
+                
+            }
+            n1 /= 10;
+            n2 /= 10;
+            count++;
+        }
+        return ans;
+   }
+//editorial
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+    int b = scn.nextInt();
+    int n1 = scn.nextInt();
+    int n2 = scn.nextInt();
+    int d = getDifference(b, n1, n2);
+    System.out.println(d);
+  }
+  public static int getDifference(int b, int n1, int n2) {
+    int rv = 0;
+    int p = 1;
+    int c = 0;
+    while ( n2 > 0 ) // we only need to run till minuend doesnt become zero
+      //we know minuend is greater than subtrahend
+    {
+      int d1 = n1 % 10; //rightmost digit extraction
+      int d2 = n2 % 10;
+      d2 += c; //settling previous carries (or borrow)
+      int d = 0;
+      if ( d2 >= d1) //if minuend greater than subtrahend
+      {
+        c = 0;
+        d = d2 - d1;
+      }
+      else // minuend less than subtrahend
+      {
+        c = -1; // set carry = -1 to be settled in next iteration
+        d = d2 + b - d1; // add base
+      }
+      rv += d * p;
+      p *= 10;
+      n1 /= 10;
+      n2 /= 10;
+    }
+    return rv;
+  }
+}
+
+//Any Base Multiplication
+
     
     
     
