@@ -65,8 +65,8 @@ public class Main{
 }
 
 //OUTPUT
-//11 is bad
-//21 is good
+//11 is bad             i++ : increments value by 1 but still uses original value
+//21 is good            ++i : first increments value of 'i' and then uses updated value of variable
 
 
 //Quiz Question *******************************************************************************************************************
