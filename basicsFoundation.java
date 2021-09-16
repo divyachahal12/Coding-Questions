@@ -168,7 +168,9 @@ public static void main(String[] args) {
 //Digits Of A Number
 public static void main(String[] args) {
         //print digits left to right
-      // find total no of digits; make 10s number with no. of zeroes = digits -1, using math.pow by typecasting it to int, and use it as divisor; run a loop till divisor > 0 divide the number by obtained 10s no.i.e. divisor and print quotient; store remainder also for that divisor, and divide divisor after that by 10
+      // find total no of digits; make 10s number with no. of zeroes = digits -1, using math.pow by typecasting it to int, and use it as divisor; 
+    //run a loop till divisor > 0 divide the number by obtained 10s no.i.e. divisor and print quotient; 
+    //store remainder also for that divisor, and divide divisor after that by 10
       
       Scanner sc = new Scanner(System.in);
       int n = sc.nextInt();
@@ -208,7 +210,8 @@ public static void main(String[] args) {
 
 //Inverse Of A Number
 public static void main(String[] args) {
-    //make a variable ans; run a loop from 1 to no of digits; take modulo of no. with 10 gives remainder; update value of ans by adding i*10^(remainder -1) to it, update the no.n by dividing by 10; return ans
+    //make a variable ans; run a loop from 1 to no of digits; take modulo of no. with 10 gives remainder; 
+    //update value of ans by adding i*10^(remainder -1) to it, update the no.n by dividing by 10; return ans
     Scanner sc = new Scanner(System.in);
     int n = sc.nextInt();
     int m = n;
