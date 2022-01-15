@@ -23,6 +23,7 @@ public static class TreeNode(){
     
     
     //height or depth of a tree is same, seen from different perspectives
+    //by default height is wrt to edge, i.e. no. of edges
     public static int height(TreeNode root){
         // if(root == null)
         //     return -1;
