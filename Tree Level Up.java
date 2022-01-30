@@ -72,6 +72,29 @@ public static class TreeNode(){
     }
     
     //Node to Root Path
+    public static boolean nodeToRootPath(TreeNode root, int data, ArrayList<TreeNode> ans){
+        if(root == null){
+            return false;
+        }
+        
+        //required data node
+        if(root.val == data){
+            ans.add(root);
+            return true;
+        }
+        
+        boolean res = nodeToRootPath( root.left, data, ans) || nodeToRootPath(root.right, data, ans);
+        
+        //for remaining parent nodes
+        if(res){
+            ans.add(root);
+        }
+        
+        return ans;
+        
+    }
+    
+
     
     
 }
