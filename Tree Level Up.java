@@ -72,28 +72,32 @@ public static class TreeNode(){
     }
     
     //Node to Root Path
-    public static boolean nodeToRootPath(TreeNode root, int data, ArrayList<TreeNode> ans){
-        if(root == null){
-            return false;
-        }
-        
-        //required data node
-        if(root.val == data){
-            ans.add(root);
-            return true;
-        }
-        
-        boolean res = nodeToRootPath( root.left, data, ans) || nodeToRootPath(root.right, data, ans);
-        
-        //for remaining parent nodes
-        if(res){
-            ans.add(root);
-        }
-        
+    public static ArrayList<TreeNode> nodeToRootPath(TreeNode node, int data) {
+        ArrayList<TreeNode> ans = new ArrayList<>();
+        boolean res = ntr(node, data, ans);
         return ans;
-        
     }
-    
+  
+    public static boolean ntr(TreeNode node, int data, ArrayList<TreeNode> ans){
+        if(node == null){
+           return false;
+        }
+
+        if( node.val == data){
+           ans.add(node);
+           return true;
+        }
+
+        boolean res = ntr(node.left, data, ans) || ntr(node.right, data, ans);
+
+        if(res){
+           ans.add(node);
+        }
+
+        return res;
+
+      }
+
     //Node to Root Path ---> Return type 
     
     
