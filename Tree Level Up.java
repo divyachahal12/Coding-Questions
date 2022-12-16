@@ -158,7 +158,45 @@ public static class TreeNode(){
           
   }
 
+  //All Single Child Parent in Binary Tree
+  public static void exactlyOneChild(TreeNode root, ArrayList<Integer> ans) {
+    if(root == null ||(root.left == null && root.right == null)) return;
     
+    if(root.left == null || root.right == null){
+        ans.add(root.val);
+        
+    }
+    
+    exactlyOneChild(root.left, ans);
+    exactlyOneChild(root.right, ans);
+  
+  }
+  
+  public static ArrayList<Integer> exactlyOneChild(TreeNode root) {
+    ArrayList<Integer> ans = new ArrayList<>();
+    exactlyOneChild(root, ans);
+    
+    return ans;
+  }
+    
+  //Count All Single Child Parent In Binary Tree  
+  public static int countExactlyOneChild(TreeNode node) {
+      
+    if(node == null ||(node.left == null && node.right == null)){
+          return 0;
+    }
+    int leftcount = countExactlyOneChild(node.left);
+    int rightcount = countExactlyOneChild(node.right);
+    
+    int ans = leftcount + rightcount;
+    if(node.left == null || node.right == null){
+        ans += 1;
+    }
+    return ans;
+
+  }
+    
+  
     
     
 }
