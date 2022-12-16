@@ -98,8 +98,34 @@ public static class TreeNode(){
 
       }
 
-    //Node to Root Path ---> Return type 
+    //Node to Root Path ---> Return type (do dry run)
+    public static ArrayList<TreeNode> nodeToRootPath(TreeNode node, int data) {
+  
+    if(node == null){
+        return new ArrayList<>();
+    }
     
+    if(node.val == data){
+        ArrayList<TreeNode> base = new ArrayList<>();
+        base.add(node);
+        return base;
+    }
+    
+    ArrayList<TreeNode> left = nodeToRootPath(node.left, data);
+    if(left.size() != 0){
+        left.add(node);
+        return left;
+    }
+    
+    ArrayList<TreeNode> right = nodeToRootPath(node.right, data);
+    if(right.size() != 0){
+        right.add(node);
+        return right;
+    }
+    
+    return new ArrayList<>();
+    
+  }
     
     
 
