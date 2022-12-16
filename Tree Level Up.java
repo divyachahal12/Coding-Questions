@@ -128,7 +128,37 @@ public static class TreeNode(){
   }
     
     
+  //Root to All Leaf Node Path
+  public static void RootToAllLeafLeaffPath(TreeNode root, ArraList<ArrayList<Integer>> ans, ArrayList<Integer> smallAns){
+      if(root == null) return;
+      
+      if(root.left == null && root.right == null){//leaf node
+          ArrayList<Integer> base = new ArrayList<>(smallAns);
+          base.add(root.val);
+          ans.add(base);
+          return;
+        
+      }
+      smallAns.add(root.val);
+      //left call
+      RootToAllLeafLeaffPath(root.left, ans, smallAns);
+      //right call
+      RootToAllLeafLeaffPath(root.right, ans, smallAns);
+      //backtracking from last node
+      smallAns.remove(smallAns.size()-1);
+  }
+    
+  public static ArrayList<ArrayList<Integer>> RootToAllLeafLeaffPath(TreeNode root){
+      ArraList<ArrayList<Integer>> ans = new ArrayList<>();
+      ArrayList<Integer> smallAns = new ArrayList<>();
+      
+      RootToAllLeafLeaffPath(root, ans, smallAns);//calling above function
+      
+      return ans;
+          
+  }
 
+    
     
     
 }
