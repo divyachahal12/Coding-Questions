@@ -196,11 +196,90 @@ public static class TreeNode(){
 
   }
     
-  
-    
-    
-}
+  //863 leetcode---> All nodes distance k in Binary Tree
+    //Node to Root Path
+    public static boolean ntr(TreeNode node, int data, ArrayList<TreeNode> ans){
+        if(node == null){
+           return false;
+        }
+        if( node.val == data){
+           ans.add(node);
+           return true;
+        }
+        boolean res = ntr(node.left, data, ans) || ntr(node.right, data, ans);
+        if(res){
+           ans.add(node);
+        }
+        return res;
+      } 
 
+    public void kdown(TreeNode root, int k, TreeNode block, List<Integer> ans){
+        if(root == null || k < 0 || root == block) return;
+        
+        if(k == 0){
+            ans.add(root.val);
+            return;
+        }
+        kdown(root.left, k-1, block, ans);
+        kdown(root.right, k-1, block, ans);
+    }
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        ArrayList<TreeNode> path = new ArrayList<>();
+        boolean flag = ntr(root, target.val, path);
+
+        TreeNode block = null;
+        List<Integer> ans = new ArrayList<>();
+        for(int i = 0; i < path.size(); i++){
+            kdown(path.get(i), k - i, block, ans);
+            block = path.get(i);
+        }
+        return ans;
+    }
+
+  //another approach to reduce space of path list
+    //by using return int function to check for block nodes
+  public void kdown(TreeNode root, int k, TreeNode block, List<Integer> ans){
+        if(root == null || k < 0 || root == block) return;
+
+        if(k == 0){
+            ans.add(root.val);
+            return;
+        }
+
+        kdown(root.left, k-1, block, ans);
+        kdown(root.right, k-1, block, ans);
+    }
+    public int distanceK(TreeNode root, TreeNode target, int k, List<Integer> ans){
+        if(root == null) return -1;
+
+        if(root == target){
+            kdown(root, k, null, ans);
+            return 1;
+        }
+
+        //to check if ans came from left side, to make it block if it's true
+        int leftDistance = distanceK(root.left, target, k, ans);
+        if(leftDistance != -1){//make this block node and changes in value of k
+            kdown(root, k - leftDistance, root.left, ans);
+            return leftDistance + 1;
+        }
+
+        //to check if ans came from right side, to make it block if it's true
+        int rightDistance = distanceK(root.right, target, k, ans);
+        if(rightDistance != -1){//make this block node and changes in value of k
+            kdown(root, k - rightDistance, root.right, ans);
+            return rightDistance + 1;
+        }
+        return -1;
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<Integer> ans = new ArrayList<>();
+        distanceK(root, target, k, ans);
+        return ans;
+    }
+    
+    
 
 
 
