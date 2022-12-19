@@ -98,4 +98,54 @@ public int getFirst() {
       }
     }
 
+  //Add First in LL
+   public void addFirst(int val) {
+
+      Node first = new Node();
+      first.data = val;
+      first.next = head;
+      head = first;
+
+      if(size == 0){
+         tail = first;
+      }
+      size++;
+   }
+
+//Add at Index in LL
+public void addAt(int idx, int val) {
+  if (idx < 0 || idx > size) {
+    System.out.println("Invalid arguments");
+
+  } else if (idx == 0) {
+    Node temp = new Node();
+      temp.data = val;
+      temp.next = head;
+      head = temp;
+      
+      if(size == 0){
+        tail = temp;
+      }
+
+      size++;
+    
+  } else if (idx == size) {
+    tail.next = nodeToadd;
+    tail = nodeToadd;
+  } else {
+    Node node = new Node();
+    node.data = val;
+
+    Node temp = head;
+    for (int i = 0; i < idx - 1; i++) {
+      temp = temp.next;
+    }
+    node.next = temp.next;
+
+    temp.next = node;
+    size++;
+  }
+}
+
+
 
