@@ -147,5 +147,115 @@ public void addAt(int idx, int val) {
   }
 }
 
+//Remove last in LL
+public void removeLast(){
+      if(size == 0){
+          System.out.println("List is empty");
+          return;
+      }else if(size == 1){
+          head = tail = null;
+      }else{
+          Node temp = head;
+          for(int i = 0; i <size-2; i++){
+            temp = temp.next;
+          }
+          tail = temp;
+          temp.next = null;
+      }
+      size--;
+ }
 
+//Remove at Index in LL
+public void removeAt(int idx) {
+  if (idx < 0 || idx >= size) {
+    System.out.println("Invalid arguments");
 
+  } else if (idx == 0) {
+    removeFirst();
+  } else if (idx == size - 1) {
+    removeLast();
+  } else {
+    Node temp = head;
+    for (int i = 0; i < idx - 1; i++) {
+      temp = temp.next;
+    }
+
+    temp.next = temp.next.next;
+    size--;
+  }
+}
+
+public void removeFirst(){
+        if(size == 0) {
+          System.out.println("List is empty");
+        }
+        else if(size == 1){
+            head = tail = null;
+            size = 0;
+        }else{
+            head = head.next;
+            size--;
+        }
+      
+    }
+  }
+
+public void removeLast(){
+      if(size == 0){
+          System.out.println("List is empty");
+          return;
+      }else if(size == 1){
+          head = tail = null;
+      }else{
+          Node temp = head;
+          for(int i = 0; i <size-2; i++){
+            temp = temp.next;
+          }
+          tail = temp;
+          temp.next = null;
+      }
+      size--;
+ }
+
+//Reverse a LL (data iterative)
+private Node getNodeAt(int idx) {
+  Node temp = head;
+
+  for (int i = 0; i < idx; i++) {
+    temp = temp.next;
+  }
+  return temp;
+}
+public void reverseDI() {
+  int li = 0;
+  int ri = size - 1;
+  while (li < ri) {
+    Node left = getNodeAt(li);
+    Node right = getNodeAt(ri);
+    int temp = left.data;
+    left.data = right.data;
+    right.data = temp;
+    li++;
+    ri--;
+  }
+}
+
+/*******************IMPORTANT*********************/
+//Reverse LL(Pointer Iterative); do DRY run to understand
+public void reversePI(){
+        if(size == 0){
+            return;
+        }
+      Node prev = null;
+      Node curr = head;
+      while(curr != null){
+          Node next = curr.next;
+          curr.next = prev;
+          prev = curr;
+          curr = next;
+          
+      }
+      Node temp = head;
+      head = tail;
+      tail = temp;
+ }
