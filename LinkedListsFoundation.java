@@ -348,4 +348,24 @@ public static class LLToQueueAdapter {
     }
   }
 
+//Kth Node From End Of Linked List
+/*
+You are required to complete the body of kthFromLast function. 
+The function should be an iterative function and should return the kth node from end of linked list. 
+Also, make sure to not use size data member directly or indirectly (by calculating size via making a traversal). 
+k is a 0-based index. Assume that valid values of k will be passed.
+*/
+public int kthFromLast(int k) {
+  Node fast = head;//first pointer
+  Node slow = head;//second pointer
+  
+  for (int i = 0; i < k; i++) {
+    fast = fast.next;
+  }
+  while (fast != tail) {
+    slow = slow.next;
+    fast = fast.next;
+  }
+  return slow.data;
+}
 
