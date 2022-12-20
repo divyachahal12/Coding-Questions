@@ -369,3 +369,20 @@ public int kthFromLast(int k) {
   return slow.data;
 }
 
+//Mid Of Linked List
+/*
+You are required to complete the body of mid function. 
+The function should be an iterative function and should return the mid of linked list.
+Also, make sure to not use size data member directly or indirectly (by calculating size via making a traversal).
+In linked list of odd size, mid is unambigous. In linked list of even size, consider end of first half as mid.
+*/
+public int mid() {
+      Node slow = head;
+      Node fast = head;
+      while(fast.next != null && fast.next.next != null){
+          slow = slow.next;
+          fast = fast.next.next;
+      }
+      return slow.data;
+}
+
