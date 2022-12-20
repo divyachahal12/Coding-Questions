@@ -259,3 +259,93 @@ public void reversePI(){
       head = tail;
       tail = temp;
  }
+
+//Linked List To Stack Adapter
+/*As data members, you've a linkedlist available in the class.
+3. Here is the list of functions that you are supposed to complete
+    3.1. push -> Should accept new data in LIFO manner
+    3.2. pop -> Should remove and return data in LIFO manner. If not 
+     available, print "Stack underflow" and return -1.
+    3.3. top -> Should return data in LIFO manner. If not available, print 
+    "Stack underflow" and return -1.
+    3.4. size -> Should return the number of elements available in the 
+    stack
+*/
+public static class LLToStackAdapter {
+    LinkedList<Integer> list;
+
+    public LLToStackAdapter() {
+      list = new LinkedList<>();
+    }
+
+
+    int size() {
+      return list.size();
+    }
+
+    void push(int val) {
+      list.addFirst(val);
+    }
+
+    int pop() {
+      if(size() ==0){
+          System.out.println("Stack underflow");
+          return -1;
+      }
+      return list.removeFirst();
+    }
+
+    int top() {
+        if(size() ==0){
+          System.out.println("Stack underflow");
+          return -1;
+      }
+      return list.getFirst();
+    }
+  }
+
+
+//Linked List To Queue Adapter
+/*
+ As data members, you've a linkedlist available in the class.
+3. Here is the list of functions that you are supposed to complete
+     3.1. add -> Should accept new data in FIFO manner
+     3.2. remove -> Should remove and return data in FIFO manner. If not available, 
+     print "Queue underflow" and return -1.
+     3.3. peek -> Should return data in FIFO manner. If not available, print "Queue 
+     underflow" and return -1.
+     3.4. size -> Should return the number of elements available in the queue
+*/
+public static class LLToQueueAdapter {
+    LinkedList<Integer> list;
+
+    public LLToQueueAdapter() {
+      list = new LinkedList<>();
+    }
+
+    int size() {
+      return list.size();
+    }
+
+    void add(int val) {
+      list.addLast(val);
+    }
+
+    int remove() {
+      if(size() == 0){
+          System.out.println("Queue underflow");
+          return -1;
+      }
+      return list.removeFirst();
+    }
+
+    int peek() {
+      if(size() == 0){
+          System.out.println("Queue underflow");
+          return -1;
+      }
+      return list.getFirst();
+    }
+  }
+
+
