@@ -386,3 +386,89 @@ public int mid() {
       return slow.data;
 }
 
+
+//Merge Two Sorted Linked Lists
+public static LinkedList mergeTwoSortedLists(LinkedList l1, LinkedList l2) {
+            Node one = l1.head;
+            Node two = l2.head;
+            
+            LinkedList ans = new LinkedList();
+            while(one != null && two != null){
+                if(one.data < two.data){
+                    ans.addLast(one.data);
+                    one = one.next;
+                }else{
+                    ans.addLast(two.data);
+                    two = two.next;
+                }
+            }
+            while(one != null){
+                ans.addLast(one.data);
+                one = one.next;
+            }
+            
+            while(two != null){
+                ans.addLast(two.data);
+                two = two.next;
+            }
+            
+            return ans;
+  }
+
+
+//To Merge Sort A Linked List
+public static LinkedList mergeSort(Node head, Node tail){
+      if(head == tail){
+        LinkedList base = new LinkedList();
+        base.addLast(head.data);
+        return base;
+      }
+        
+      Node mid = midNode(head, tail);
+      LinkedList firstSortedHalf = mergeSort(head, mid);
+      LinkedList secondSortedHalf = mergeSort(mid.next, tail);
+      LinkedList completeList = mergeTwoSortedLists(firstSortedHalf, secondSortedHalf);
+      
+      return completeList;
+}
+
+public static Node midNode(Node head, Node tail){
+        Node fast = head;
+        Node slow = head;
+        
+        while(fast.next != tail && fast != tail){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+}
+
+public static LinkedList mergeTwoSortedLists(LinkedList l1, LinkedList l2) {
+      LinkedList ml = new LinkedList();
+
+      Node one = l1.head;
+      Node two = l2.head;
+      while (one != null && two != null) {
+        if (one.data < two.data) {
+          ml.addLast(one.data);
+          one = one.next;
+        } else {
+          ml.addLast(two.data);
+          two = two.next;
+        }
+      }
+
+      while (one != null) {
+        ml.addLast(one.data);
+        one = one.next;
+      }
+
+      while (two != null) {
+        ml.addLast(two.data);
+        two = two.next;
+      }
+
+      return ml;
+}
+
+
