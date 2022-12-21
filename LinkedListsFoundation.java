@@ -471,4 +471,79 @@ public static LinkedList mergeTwoSortedLists(LinkedList l1, LinkedList l2) {
       return ml;
 }
 
+//Remove Duplicates in a Sorted List
+/*
+The problem deals with removing duplicate elements in a sorted linked list. 
+For example, we have a list 1 -> 2 -> 2 -> 2 -> 3 -> 4 -> 5 -> 5, then the output list should be 1 -> 2 -> 3 -> 4 -> 5.
 
+The idea here is to check for every element whether it is already present in the list or not and then making a selection for the same. 
+As here we know that the list is sorted so checking the lastmost element can make us ensure that whether the list contains the current element or not.
+To achieve this we are going to create our new list, where we will store our output list. 
+Now we will run a loop up to the point when our list becomes empty and for every iteration, we will select the first node and remove it from the list.
+Now in our output list, we would check whether the element is already present in the list or not, 
+  if present then we would discard it 
+  else we would add that element to the list.
+*/
+public void removeDuplicates(){
+      LinkedList res = new LinkedList();
+      while(this.size() != 0){
+          int val = this.getFirst();//this.head.data;
+          this.removeFirst();
+          if(res.size() ==0 || val != res.tail.data){
+              res.addLast(val);
+          } 
+      }
+      this.head = res.head;
+      this.tail = res.tail;
+      this.size = res.size;
+}
+
+
+//Odd Even LL
+/*
+The problem deals with modifying the input list such that all odd values follow all even values. 
+For example the list is 1 -> 2 -> 3 -> 4 -> 5 -> 7 -> 6 -> 9 -> 8 so our 
+output should be 1 -> 3 -> 5 -> 7 -> 9 -> 2 -> 4 -> 6 -> 8.
+
+To achieve this we will be taking two lists, one for storing odd values and the other for storing even values. 
+Now we iterate over the input list and segregate every element by checking whether it is an odd or even element. 
+Later on, we combine both the list by adding an even list at the tail of the odd list and then update the linked list data member by this resultant list.
+After segregation, we have taken three cases:
+
+1. odd.size() > 0 and even.size() > 0
+2. odd.size() > 0 and even.size() == 0
+3. odd.size() == 0 and even.size() > 0
+*/
+    public void oddEven(){
+      LinkedList odd = new LinkedList();
+      LinkedList even = new LinkedList();
+      
+      while(this.size() != 0 ){
+          int val = this.getFirst();
+          this.removeFirst();
+          
+          if(val % 2 == 0){//even
+            even.addLast(val);  
+          }else{
+              odd.addLast(val);
+          }
+          
+      }
+      if(odd.size() > 0 && even.size() > 0){
+          odd.tail.next = even.head;
+          this.head = odd.head;
+          this.tail = even.tail;
+          this.size = odd.size + even.size;
+      }else if(odd.size > 0){
+          this.head = odd.head;
+          this.tail = odd.tail;
+          this.size = odd.size;
+      }else if(even.size > 0){
+          this.head = even.head;
+          this.tail = even.tail;
+          this.size = even.size;
+      }
+    }
+
+
+//
