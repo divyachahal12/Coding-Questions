@@ -546,4 +546,84 @@ After segregation, we have taken three cases:
     }
 
 
-//
+//K Reverse In Linked List
+/*
+The problem deals with reversing an input list in the groups of given size. 
+For example, suppose we have a list 1 ->2 ->3 ->4 ->5 ->6 ->7 ->8 ->9 ->10 ->11 and we have value of k = 3 then our output list should be reversed in group of size 3. 
+Hence the output list will look like:
+
+3 ->2 ->1 ->6 ->5 ->4 ->9 ->8 ->7 ->10 ->11.
+
+A vague idea about approaching this problem is to select every group of size k and reverse it until we reach the end, and somehow coagulate the resulting reversed groups to get our result.
+
+Now to achieve this, we are going to create two lists, one to store the final result and the other to store the temporary reversed groups. 
+Our operations continues until we traverse the entire list or here until the size of the input list is greater than zero.
+
+Now there can be two cases where our selected group can lie:
+
+1. this.size() >= k
+
+This is the case when the remaining list is of length greater than or equal to the group size. 
+This implies that in this case, we need to select a group of size k and reverse it. 
+This can be achieved by selecting every element from the input list (of the selected group) and remove it from the input list 
+and add it to the head of the temporary list, doing this for k times will result in a group of size k reversed and stored in a temporary list, 
+say, we have,
+
+Input List: 1 -> 2 -> 3 -> 4 -> 5
+
+then after the above-mentioned operations, we would have:
+
+Remaining Input List: 4 -> 5
+
+Temporary List: 3  -> 2 -> 1
+
+2. this.size() < k
+
+This is the case when the remaining list is of length is less than the given group size. 
+In this case, we need not reverse the list, rather we have to simply add this list directly to our output list and get our final result.
+
+All the groups are firstly stored in a temporary list and then are added to the output list where we can have two cases:
+
+1. Output List is Empty
+
+This is the case when we have operated on our first group. 
+Here we simply need to have the temporary list as our output list as this group will be the starting elements of our result
+
+2. Output List is not Empty
+
+This is the latter case when we already have elements in our output list. 
+In this case, we need to add elements of the temporary list at the end of the output list and later update the tail and size of the output list.
+
+Lastly, we need to update the output list to the linked list data member.
+*/
+public void kReverse(int k) {
+  LinkedList prev = null;
+
+  while (this.size > 0) {
+    LinkedList curr = new LinkedList();
+    if (this.size >= k) {
+      for (int i = 0; i < k; i++) {
+        int val = this.getFirst();
+        this.removeFirst();
+        curr.addFirst(val);
+      }
+    } else {
+      int originalSize = this.size;
+      for (int i = 0; i < originalSize; i++) {
+        int val = this.getFirst();
+        this.removeFirst();
+        curr.addLast(val);
+      }
+    }
+    if (prev == null) {
+      prev = curr;
+    } else {
+      prev.tail.next = curr.head;
+      prev.tail = curr.tail;
+      prev.size += curr.size;
+    }
+  }
+  this.head = prev.head;
+  this.tail = prev.tail;
+  this.size = prev.size;
+}
