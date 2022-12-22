@@ -627,3 +627,61 @@ public void kReverse(int k) {
   this.tail = prev.tail;
   this.size = prev.size;
 }
+
+//Display Reverse (recursive) - Linked List
+/*
+The problem deals with displaying the reversed linked list, recursively this time. In earlier problems, 
+we developed an iterative solution but here we will come up with a recursive approach. 
+The idea is simple where we just need to traverse the list till the end using recursion and after we hit the base case 
+and start returning the function calls in recursion stack, then at that point we will print the corresponding element. 
+This is similar to the print decreasing problem we discussed in recursion level 1.
+*/
+private void displayReverseHelper(Node node) {
+  if (node == null) {
+    return;
+
+  }
+  displayReverseHelper(node.next);
+  System.out.print(node.data + " ");
+}
+public void displayReverse() {
+  displayReverseHelper(head);
+  System.out.println();
+}
+
+
+//Reverse Linked List (pointer - Recursive)
+/*
+The problem deals with displaying the reversed linked list recursively with the help of pointers, 
+in other words, we need to direct the node pointers to develop the reversed list.
+
+The only way to reverse the list using pointers is to point the node next to the current node to the current node. 
+Here we will also use this approach but recursively. For that, we traverse our list to the end, and then for every function return, 
+we point the next node to the current node. 
+Recursion here ensures that we do not lose any data and our data remains unchanged.
+
+To sum, all we need to do here is to apply recursion to traverse the list, 
+and while returning ensure that we point the next node to the current node. 
+Now after this, the head node needs to be tackled separately as there is no node behind it where it would point so we need to point it to null. 
+Now all that is left is to update the data member linked list with the reversed list.
+*/
+private void reversePRHelper(Node node){
+      if(node == tail){
+          return;
+      }
+      reversePRHelper(node.next);
+      
+      if(node == tail){
+          //do nothing
+      }else{
+          node.next.next = node;//(node.next).next = node
+      }
+}
+
+public void reversePR(){
+      reversePRHelper(head);
+      head.next = null;
+      Node temp = head;
+      head = tail;
+      tail = temp;
+}
