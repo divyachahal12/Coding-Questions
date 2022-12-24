@@ -685,3 +685,39 @@ public void reversePR(){
       head = tail;
       tail = temp;
 }
+
+
+//is LL a Palindrome
+/*
+The problem deals with checking whether the given list is a palindrome or not. 
+A list is a palindrome when there is no difference in iterating the list either from start to end or vice-versa.
+
+To check for the palindrome, we need to compare the first node with the last node, similarly, the second node with the second last node, and so on. 
+We can achieve this with the help of recursion by traversing the list till we reach the base case, this ensures that we are at the end of the linked list. 
+Now we keep a global variable which points at the head. 
+Comparing global variable and last node, 
+  if true, then we update the global variable to next node, and returning from function ensures that we go back to the previous node, 
+  and if false then irrespective of future comparisons the list can not be palindromic hence non-palindromic.
+*/
+    Node left;//pointer from left, declared globally
+
+    public boolean IsPalindromeHelper(Node right) {//pointer from right
+        if(right == null){
+            return true;
+        }
+        boolean res = IsPalindromeHelper(right.next);
+            if(res == false){
+                return false;
+            }else if(left.data != right.data){
+                return false;
+            }else{
+                left = left.next;
+                return true;
+            }
+    }
+    
+    public boolean IsPalindrome() {
+        left = head;
+        return IsPalindromeHelper(head);
+      
+    }
