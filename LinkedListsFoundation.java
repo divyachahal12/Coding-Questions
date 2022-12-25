@@ -721,3 +721,119 @@ Comparing global variable and last node,
         return IsPalindromeHelper(head);
       
     }
+
+
+//Fold a LL
+/*
+The problem deals with rearranging the linked list or folding the list. 
+Suppose we have a list of length n indexed from 0 to (n-1) then, 
+our output list should be of the format: 0th Index -> (n-1)th Index -> 1st Index -> (n-2)th Index -> 2nd Index -> (n-3)th Index ... and so on.
+
+Say for example a list 1->2->3->4->5 
+will fold as 1->5->2->4->3 
+and a list with even length 
+1->2->3->4->5->6 
+will fold as 1->6->2->5->3->4.
+
+To solve this problem, we can make use of recursion. 
+Here we will keep a global pointer that will point to the tail of our output resultant list. 
+Now during back - recursion (or function return from recursion stack) we will do the following operations:
+
+1. (index+1)> size/2
+
+This is the case when we need to fold the list. 
+This case implies that the node is at the right half of the list and hence needs to be rearranged. 
+So for that, we will add it to the tail of the output list and update its next pointer.
+
+2. (index+1) == size/2
+
+This is the case for the last element in the output list so for that we simply need to add this element and set its next pointer to null.
+
+3. (index+1)< size/2
+
+This is the case when our element was on the left half, these are the elements that are already taken care of so we need not consider them and return.
+*/
+
+    Node left;
+    private void foldHelper(Node right, int floor) {
+      if(right == null){
+          return;
+      }
+      foldHelper(right.next, floor+1);
+      if(floor > size/2){
+        Node temp = left.next;
+        left.next = right;
+        right.next = temp;
+        left = temp;//left.next.next
+      }else if(floor == size/2){
+          tail = right;
+          tail.next = null;
+      }
+    }
+    public void fold() {
+        left = head;
+      foldHelper(head, 0);
+    }
+
+
+//Add two LL
+/*
+The problem here deals with adding two linked list wherein we are not allowed the following operations:
+
+1. We are not allowed convert the list to integers
+
+2. We are not allowed to convert the list to arrays
+
+3. We are not allowed to reverse the list
+
+To solve this problem we will use a recursive approach. 
+The idea here is that we need to add the list 
+but as we know that addition is only possible when traversing from the end like adding firstly the unit place elements 
+and then carry forwarding to the next place and so on. 
+This generalized process here we will try to implement using recursion as we are not allowed to reverse the list.
+
+Here we will be passing the current element and its place as parameters to the recursive function 
+and we will make recursive calls till we hit the base case. Our recursive function is built to return the carry forward number if any. 
+So for the base case when we have no elements after the unit place (which is true) then we return 0. 
+Now for the unit place, we have supposed both the numbers so we add the unit places with the carry number 
+and then add the resultant number at the head of the global resultant linked list. 
+Adding it to the head always ensure that firstly unit place is placed at head later on the tenth place is added a
+nd then hundredth place and so on this makes our resultant list to be in order and hence no need to reverse the obtained result.
+
+To summarize we are traversing over the lists until we hit the base case, 
+thereafter when we are popping out from the recursive stack we are entering the result at its correct place 
+and returning the carry value. Also, we are keeping a track of lists with different digits to avoid miscalculation, 
+as in that case when one element is not long enough to avoid error we are not considering it (this explains the if conditions in the code).
+*/
+public static int addLLHelper(Node one, int placeValue1, Node two, int placeValue2, LinkedList res) {
+      if(one == null && two == null){
+          return 0;
+      }
+      int data = 0;
+      
+      if(placeValue1 > placeValue2){
+          int oldCarry = addLLHelper(one.next, placeValue1 -1, two, placeValue2, res);
+          data = one.data + oldCarry;
+          
+      }else if(placeValue1 < placeValue2){
+          int oldCarry = addLLHelper(one, placeValue1, two.next, placeValue2-1, res);
+          data = two.data + oldCarry;
+      }else{//placeValue1 == placeValue2
+          int oldCarry = addLLHelper(one.next, placeValue1-1, two.next, placeValue2-1, res);
+          data = one.data +two.data + oldCarry;
+      }
+      
+      int newData = data % 10;
+      res.addFirst(newData);
+      int newCarry = data / 10;
+      return newCarry;
+    }
+    
+    public static LinkedList addTwoLists(LinkedList one, LinkedList two) {
+      LinkedList res = new LinkedList();
+      int oldCarry = addLLHelper(one.head, one.size, two.head, two.size, res);
+      if(oldCarry>0){
+          res.addFirst(oldCarry);
+      }
+      return res;
+    }
