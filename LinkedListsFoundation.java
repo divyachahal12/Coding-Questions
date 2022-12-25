@@ -837,3 +837,51 @@ public static int addLLHelper(Node one, int placeValue1, Node two, int placeValu
       }
       return res;
     }
+
+
+//Intersection Point(Node) of LL
+/*
+The problem deals with finding the intersection point in a Y - shaped linked list. For example, given the linked list:
+
+We have head1 as a -> b -> c -> d -> e -> f having a length of 6 and head2 as g -> d -> e -> f having a length of 4. 
+Here we can see that the intersection point is a node with value d. 
+To get this using code we will build our logic which goes like this:
+
+1. head1.size > head2.size
+
+This is the case when the distance of head1 from the intersection point is greater than that of head2, 
+so to compensate we will traverse head1 to the point where the distance for both pointers becomes equal.
+
+2. head1.size < head2.size
+
+This is the case when the distance of head2 from the intersection point is greater than that of head1, 
+so to compensate we will traverse head2 to the point where the distance for both pointers becomes equal.
+
+When we have both pointers equidistance from the intersection point 
+then we will traverse both lists at the same pace until we reach a common node and the first common node will be our intersection point.
+
+So for the above list, firstly we would traverse list head1 until head1 points at node c.
+Now we will move both pointers to the next node and hence we reach a common node i.e. in this case node, 
+hence node d is our resultant intersection point.
+*/
+    public static int findIntersection(LinkedList one, LinkedList two){
+      Node t1 = one.head;
+      Node t2 = two.head;
+      
+      int diff = Math.abs(one.size - two.size);
+      if(one.size > two.size){
+          for(int i = 0; i < diff; i++){
+              t1 = t1.next;
+          }
+      }else{
+          for(int i = 0; i < diff; i++){
+              t2 = t2.next;
+          }
+      }
+      while(t1 != t2){
+          t1 = t1.next;
+          t2 = t2.next;
+      }
+      
+      return t1.data;
+    }
