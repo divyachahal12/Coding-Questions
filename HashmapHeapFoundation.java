@@ -179,6 +179,9 @@ public static void main(String[] args) throws Exception {
     }
  }
 
+
+//***********************IMPORTANT*******************************************************
+
 //K Largest Elements
 /*
 You are required to find and print the k largest elements of array in increasing order.
@@ -262,6 +265,7 @@ public static void main(String[] args) throws Exception {
       }
 }
 
+//***********************IMPORTANT*******************************************************
 
 //Median Priority Queue
 /*
@@ -317,3 +321,113 @@ Note -> If there are even number of elements in the MedianPriorityQueue, conside
       return left.size() + right.size();
     }
   }
+
+
+//***********************IMPORTANT*******************************************************
+
+//MergeK Sorted Lists
+/*
+1. You are given a list of lists, where each list is sorted.
+2. You are required to complete the body of mergeKSortedLists function. The function is expected to merge k sorted lists to create one sorted list.
+
+https://www.pepcoding.com/resources/online-java-foundation/hashmap-and-heap/merge_k_sorted_lists/topic
+
+Approach:
+The problem here deals with merging given K sorted Lists. Let's discuss the steps to achieve the output:
+
+We will use the advantage that the given lists are sorted.
+So first of all, we pick the first element of each list and add it in a box.
+It is for sure that the smallest of these elements present in this box will be,
+     the most deserving candidate for the first position in the final list which needs to be sorted.
+So we pick the smallest element out of this box and place it at the first position in the list.
+And after that we again add an element to the box from the same list, to which the removed (smallest) element belonged.
+We repeat this step until the box is completely empty.
+And at the end, the final list will have all the elements in the sorted order.
+
+--------------------------------------------------------------------------------------------------
+How to Code this?
+
+First of all we will define an array list, rv to store the final result and a Priority Queue, pq (which is basically the box).
+Then we add the first element of all the given lists into pq.
+Now we run a while loop until the size of pq becomes 0.
+After this we remove() from pq and store its data to the rv.
+WHY? Because this will be the smallest value, 
+     as initially only first values of lists were present in the pq and remove() returns the value of the smallest of these first elements.
+Then we place the next element of the list, to which the above removed element belonged, only if that was not the last element of its list.
+But HOW do we keep track of the list of the element, which was removed and whether this was the last element or not?
+
+Well for this we create a class Pair.
+➢ This Pair class has li, data and di as its data members.
+
+➢ Li stands for list index. As these K sorted lists will be provided in an arraylist of lists. 
+  So li will store the index of the li(th) list of arraylist. And therefore helps us to keep track of its position in the arraylist.
+
+➢ Data is the value, which is an element of the li(th) list of the arraylist.
+
+➢ And di represents the index of data in the li(th) list of arraylist.
+And to make use of this class; while defining the Priority Queue, we make it of type Pair.
+And every time we need, 
+we can access any list corresponding to certain data and also check for validation of data position using di to add more pairs to the pq.
+But wait! What about getting the smallest value pair while removing from pq?
+
+If we just added the elements of lists to pq, then they would have, 
+by default, arranged themselves in rank order (increasing) and returned the smallest value whenever remove() or peek() would have been called.
+But now we have Pairs instead of Integers.
+
+So HOW do we achieve that?
+
+Well we can achieve this by implementing Comparable in call Pair.And modifying compareTo( Pair o) function by returning this.data - o.data.
+
+Yes! This works.
+
+And pq gets sorted on the basis of data's value. And Pair with smaller value has more priority as defined by compareTo() function.
+
+Analysis:
+
+Time Complexity:
+The time complexity for this approach is O(nlogn) where n is the time to traverse the tree and logn for calling find() function for every node.
+Space Complexity:
+The space complexity for the function is proportional to the height of the tree due to the recursion stack. (//doubt)
+
+*/
+
+//li --> list index; di --> data index
+public class Main {
+    public static class Pair implements Comparable<Pair>{
+        int li;
+        int di;
+        int val;
+        
+        Pair(int li, int di, int val){
+            this.li = li;
+            this.di = di;
+            this.val = val;
+        }
+        
+        public int compareTo(Pair o){
+            return this.val - o.val;
+        }
+    }
+   public static ArrayList<Integer> mergeKSortedLists(ArrayList<ArrayList<Integer>> lists){
+      ArrayList<Integer> rv = new ArrayList<>();
+
+      PriorityQueue<Pair> pq = new PriorityQueue<>();
+      for(int i = 0; i < lists.size() ; i++){
+          Pair p = new Pair(i, 0, lists.get(i).get(0));
+          pq.add(p);
+      }
+      
+      while(pq.size()>0){
+          Pair p = pq.remove();
+          rv.add(p.val);
+          p.di++;
+          
+          if(p.di < lists.get(p.li).size()){
+              p.val = lists.get(p.li).get(p.di);
+              pq.add(p);
+          }
+      }
+
+      return rv;
+   }
+}
