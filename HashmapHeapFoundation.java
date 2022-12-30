@@ -431,3 +431,165 @@ public class Main {
       return rv;
    }
 }
+
+
+//Write Priority Queue Using Heap
+/*
+
+https://www.pepcoding.com/resources/online-java-foundation/hashmap-and-heap/priority_queue_using_heap/topic
+
+Here is the list of functions that you are supposed to complete:
+    2.1. add -> Should accept new data.
+    2.2. remove -> Should remove and return smallest value, if available or print 
+     "Underflow" otherwise and return -1.
+     2.3. peek -> Should return smallest value, if available or print "Underflow" 
+     otherwise and return -1.
+     2.4. size -> Should return the number of elements available.
+     
+-------------------------------------------------------------------------------    
+The most efficient way to code our different functions is the one where add(data) and remove() takes O(log n) and peek() takes constant time. 
+So here we will learn about this way.
+
+To achieve this we use a Heap data structure.
+Heap is a Binary Tree based data structure with two additional properties. And those properties are:
+
+Heap Order Priority (HOP):
+➢ What is it?
+
+This means that the priority of a parent is always greater than its child. And to be specific, the priority of either child is not pre decided.
+
+➢ Why is it?
+
+This property basically helps us to achieve the most efficient time complexity of the peek() function which is constant (O(n)).
+Complete Binary Tree (CBT):
+➢ What is it?
+
+Supposing that the height of the tree is h, then according to this property, at least h-1 levels of the Heap should be completely filled. 
+And the last level should be filled from left to right.
+
+➢ Why is it?
+
+Use of this property again helps us to achieve the most efficient time complexity of add(data) and remove() functions when used together, 
+which is O(log n) of each.
+It is important that you know, the data structure used for storage by the heap is Array List.
+Now you may say that, above, we said Heap is a Binary Tree based data structure. Yes! We said that and this may be a little confusing.
+But please pay attention. We said that it's a Binary Tree based data structure and with this we implied on its visualization part.
+We can visualize it as a binary tree as well.
+But using the view of Binary Tree makes the implementation look easy. Let's say the Array List view is the usual view and Binary Tree has an unusual view.
+Keeping the properties of Heap in mind and trying to make the functions efficient, let's get started.
+
+ADD(DATA):
+Suppose we have to add 15 to the above tree. We should add this element to the array list such that properties of Heap are not violated.
+➢ We start with placing the element at the end of the array list.
+
+➢ At this point, in the Binary Tree representation of this tree, 
+  it can be seen that the CBT property is still valid but HOP property has been violated as 15 has more priority than its parent 35.
+
+➢ So to honor the HOP property, it is necessary that we Up-heapify a Binary Tree representation and simultaneously make changes in Array List.
+
+➢ To up-heapify the binary tree, we start with swapping the parent's data with the child's data 
+
+If HOP is still applicable then it means the element with highest priority will be present at index 0 of Array List, 
+which can be accessed in the constant time. Making the time complexity for peek() function O(1).
+And talking about time complexity of add(data), 
+it takes constant time to add the element at the last in an Array List and log n time (because of tree's height) at max to up-heapify the added data.
+Making the overall time complexity O(log n).
+So to conclude, we can say that because of Heap's CBT property, 
+we could use the array list's implementation and because of which we could run the indices formulas.
+By which we could access the parent's index and therefore swap the data and up heapify the tree. 
+And that's why we could do this in order of O(log n).
+
+REMOVE():
+➢ Why didn't we remove this element directly from the first index?
+Because doing so will take O(n) time. As after removing the element we will need to shift each element to the left.
+
+➢ Now we make use of down-heapify to honor the HOP property.
+
+➢ So to use down-heapify, if the parent's priority is less than either child, we swap the parent's data with it's child's with maximum priority.
+➢ Now we again check, if the new position of 35 honors the HOP property or not.
+
+To get at the peek at any time we just call peek().
+It is a function of O(1) that is constant time.
+Inside this function, first of all we handle a special case; if the size of the list is 0.
+If the size of the list is 0 then we print underflow and return -1.
+Otherwise we return the value at the zeroth index (root of the tree basically).
+
+To get at the size of the priority queue at any time we just call size().
+It is a function of O(1) that is constant time.
+Inside this function, we simply return the size of the arraylist in use.
+
+*/
+public static class PriorityQueue {
+    ArrayList<Integer> data;
+
+    public PriorityQueue() {
+      data = new ArrayList<>();
+    }
+
+    public void add(int val) {
+      data.add(val);
+      upHeapify(data.size() - 1);
+      
+    }
+    private void upHeapify(int i){//index of last child a.k.a. last element added
+        if(i == 0){
+            return;
+        }
+         int pi = (i - 1)/2;//pi --> parent index
+         if(data.get(i) < data.get(pi)){
+             swap(i, pi);
+             upHeapify(pi);
+         }
+    }
+    
+    private void swap(int i, int j){//i and j are index in arraylist
+        int ith = data.get(i);
+        int jth = data.get(j);
+        data.set(i, jth);//for swapping in arraylist
+        data.set(j, ith);
+    }
+
+    public int remove() {
+      if(this.size() == 0){
+          System.out.println("Underflow");
+          return -1;
+      }
+      swap(0, data.size() - 1);
+      int val = data.remove(data.size() - 1);//last element in arrayList a.k.a. last leaf node
+      downHeapify(0);
+      return val;
+    }
+    
+    private void downHeapify(int i){
+        //to be in heap root element i.e. at index 0 should have highest priority  which is min value
+        int mini = i;//mini --> min value idx
+        
+        int lci = 2*i + 1;//left child idx
+        if(lci < data.size() && data.get(lci) < data.get(mini)){
+            mini = lci;
+        }
+        
+        int rci = 2*i + 2;//right child idx
+        if(rci < data.size() && data.get(rci) < data.get(mini)){
+            mini = rci;
+        }
+        
+        if(mini != i){
+            swap(mini, i);
+            downHeapify(mini);
+        }
+    }
+
+    public int peek() {
+      if(this.size() == 0){
+          System.out.println("Underflow");
+          return -1;
+      }
+      
+      return data.get(0);
+    }
+
+    public int size() {
+      return data.size();
+    }
+}
