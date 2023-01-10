@@ -157,4 +157,62 @@ Edge Post 10--40
 Node Post 10
 */
 
+//Level-order Of Generic Tree
+//The function is expected to visit every node in "levelorder fashion".
+/*
+we use a rule; RPA: Remove, Print and Add to operate the queue.
+A while loop is applied which runs until the queue is emptied.
+An element (of type node) is removed from the queue and stored in the node.
+The node which was removed in the previous step, its data gets printed in this step.
+Then the children of this node are added to the queue using a for loop.
+*/
+  public static void levelOrder(Node node){
+    Queue<Node> q = new ArrayDeque<>();
+    q.add(node);
+    
+    while(q.size()> 0){
+        node = q.remove();
+        System.out.print(node.data + " ");
+        for(Node child : node.children){
+            q.add(child);
+        }
+    }
+    System.out.print(".");
+  }
+
+//Levelorder Linewise (generic Tree)
+/*The function is expected to visit every node in "levelorder fashion" and print them from left to right (level by level). 
+All nodes on same level should be separated by a space. Different levels should be on separate lines
+
+OUTPUT
+10 
+20 30 40 
+50 60 70 80 90 100 
+110 120
+
+we take a queue which contains the node to be considered after the current node, 
+and here we also maintain another queue say children queue, which will be storing the children until the main queue becomes empty. 
+This step ensures that whenever our main queue gets empty then we have filled the next level of nodes present in the child queue. 
+So the only step that needs to be done is to put all the contents of the child queue to the main queue 
+and insert a new line to segregate the two levels from each other.
+*/
+  public static void levelOrderLinewise(Node node){
+    Queue<Node> mainQ = new ArrayDeque<>();
+    mainQ.add(node);
+    Queue<Node> childQ = new ArrayDeque<>();
+    while(mainQ.size() > 0){
+        node = mainQ.remove();
+        System.out.print(node.data + " ");
+        for(Node child : node.children){
+          childQ.add(child);
+        }
+        
+        if(mainQ.size()==0){
+            mainQ = childQ;
+            childQ = new ArrayDeque<>();
+            System.out.println();
+        }
+    }
+  }
+
 //
