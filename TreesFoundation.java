@@ -215,4 +215,53 @@ and insert a new line to segregate the two levels from each other.
     }
   }
 
+//Levelorder Linewise Zig Zag
+/*
+The function is expected to visit every node in "levelorder fashion" but in a zig-zag manner i.e. 
+1st level should be visited from left to right, 
+2nd level should be visited from right to left and so on. 
+All nodes on same level should be separated by a space.
+Different levels should be on separate lines. 
+
+OUTPUT
+10 
+40 30 20 
+50 60 70 80 90 100 
+120 110
+
+The point here to note is that whenever our mStack becomes empty it implies that we have completed the current level completely a
+nd hence we need to move to the next level. 
+This movement can be achieved only if we have a valid zig-zag order of nodes present of the next level somewhere, 
+here comes our cStack, which if we observe then it already has stored the next level alternately from the above level, 
+so all we need to do is to point our mStack to cStack and make our cStack empty. 
+This ensures that we are already at the next level and now cStack will be storing the next level further down.
+*/
+  public static void levelOrderLinewiseZZ(Node node){
+      Stack<Node> mainS = new Stack<>();
+      mainS.push(node);
+      Stack<Node> childS = new Stack<>();
+      int level = 1;//for our convinience starting with 1 in dry run
+      while(mainS.size() > 0){
+          node = mainS.pop();
+          System.out.print(node.data + " ");
+          if(level % 2 == 1){//from left side
+              for(int i = 0; i < node.children.size(); i++){
+                  Node child = node.children.get(i);
+                  childS.push(child);
+              }
+          }else{//from right side
+              for(int i = node.children.size() - 1; i >= 0; i--){
+                  Node child = node.children.get(i);
+                  childS.push(child);
+              }
+          }
+          if(mainS.size() == 0){
+              mainS = childS;
+              childS = new Stack<>();
+              level++;//moving to next level for zigzag
+              System.out.println();
+          }
+      }
+  }
+
 //
