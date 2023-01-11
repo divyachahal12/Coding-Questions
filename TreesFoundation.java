@@ -264,4 +264,158 @@ This ensures that we are already at the next level and now cStack will be storin
       }
   }
 
-//
+//Level Order Traversals More Approaches
+/*
+Solution 1: Using Two Queues
+
+This solution, which uses two queues, (main queue and child queue),
+
+we take a queue which contains the node to be considered after the current node, 
+and here we also maintain another queue say children queue, which will be storing the children until the main queue becomes empty. 
+This step ensures that whenever our main queue gets empty then we have filled the next level of nodes present in the child queue. 
+So the only step that needs to be done is to put all the contents of the child queue to the main queue 
+and insert a new line to segregate the two levels from each other.
+*/
+  public static void levelOrderLinewise(Node node){
+    Queue<Node> mainQ = new ArrayDeque<>();
+    mainQ.add(node);
+    Queue<Node> childQ = new ArrayDeque<>();
+    while(mainQ.size() > 0){
+        node = mainQ.remove();
+        System.out.print(node.data + " ");
+        for(Node child : node.children){
+          childQ.add(child);
+        }
+        
+        if(mainQ.size()==0){
+            mainQ = childQ;
+            childQ = new ArrayDeque<>();
+            System.out.println();
+        }
+    }
+  }
+
+/*
+Solution 2: Using Dummy Node:
+Idea: We can mark the end of the current level by inserting a dummy node (with value -1), 
+      which can help us know that the next node to be popped will be in the next level.
+
+Initially, we will insert the root node and a dummy node as well before the while loop.
+Now, we will run the while loop until the queue becomes empty.
+Dequeue the front element of the queue. Print the node value, and now, there will be two cases:
+If the current element is not a dummy node (value is not -1), then simply enqueue all the children of the node in the queue.
+Else, the dummy node marks the end of the current level. Hence, we should print a new line, 
+      and also enqueue another dummy node at the end of the queue (to mark the end of the next level).
+But, before printing a new line and adding another dummy node, just check whether the queue is empty or not. 
+      If the queue is empty, we just need to break as the current level is the last one and there are no more levels to be processed.
+      
+Important Note: If we push another dummy node for the last level also, then we will get stuck in an infinite loop, 
+      as we will keep on popping one and adding another dummy node, and the size of the queue will never become 0.
+*/
+public static void levelOrderLinewise(Node node) {
+  Queue < Node > mq = new ArrayDeque < > ( );
+
+  mq.add(node);
+  mq.add(new Node (-1));
+
+  while (mq.size() > 0) {
+    node = mq.remove();
+    if (node.data != -1) {
+      System.out.print(node.data + " ");
+
+      for (Node child : node.children) {
+        mq.add(child);
+      }
+    } else {
+      if (mq.size() > 0) {
+        mq.add(new Node(-1));
+        System.out.println();
+      }
+    }
+  }
+}
+
+/*
+Solution 3: Using Size Variable:
+Idea: We can store the size of the current level in an integer variable. 
+      Then, we can run a loop equal to size times and push the children nodes (next level) in the queue.
+
+By storing the size in another variable, we will not have to worry about marking the pointer of the end of the current level, 
+as we will run a loop for size number of times.
+
+Initially, we will insert the root node in the queue before the while loop.
+Now, we will run the while loop until the queue becomes empty.
+Store the size of queue (number of nodes in current level) in an integer variable size.
+Run a loop for size number of times.
+Dequeue one element from the front of the queue, print the node value and enqueue all of it's children nodes in the queue.
+Print a newline to output the next level in the next line.
+
+Important Note: We have stored size and not used mq.size() directly in the for loop, as it will keep on increasing after adding the child nodes, 
+                and eventually all nodes will get printed in the same level.
+*/
+public static void levelOrderLinewise3(Node node) {
+  Queue < Node > mq = new ArrayDeque < > ( );
+
+  mq.add(node);
+
+  while (mq.size() > 0) {
+    int cicl = mq.size();
+    for (int i = 0; i < cicl; i++) {
+      node = mq.remove();
+      System.out.print(node.data + " ");
+
+      for (Node child : node.children) {
+        mq.add(child);
+      }
+    }
+    System.out.println();
+  }
+}
+
+/*
+Solution 4: Using Pair Node:
+Idea: Instead of just pushing the node's value, we can also push it along with its level number, i.e. make a pair object of node and level. 
+      Whenever we encounter a node with a level greater than the level of the previous node, we will print a new line also after printing the node's value.
+
+Initially, we will insert the root node with it's level as 1.
+We will initialize the current level in an integer variable as 1.
+Now, we will run the while loop until the queue becomes empty.
+Dequeue the front element of the queue. Print the node value. Push all the children of the nodes with level 1 more than the node's level.
+There will be two cases:
+If the node's level is equal to the current level, then do not do anything else.
+If the node's level is greater than the current level, then also print a new line and update the current level as the node's level.
+
+Important Note: This method takes extra memory for storing levels of the node. But the space complexity will remain the same, and that is O(n).
+*/
+public static void levelOrderLinewise4(Node node) {
+  Queue < Pair > mq = new ArrayDeque < > ( );
+
+  mq.add(new Pair(node, 1));
+
+  int level = 1;
+  while (mq.size() > 0) {
+    Pair p = mq.remove();
+    if (p.level > level) {
+      level = p.level;
+      System.out.println();
+    }
+
+    System.out.print(p.node.data + " ");
+    for (Node child : p.node.children) {
+      Pair cp = new Pair(child, p.level + 1);
+      mq.add(cp);
+    }
+  }
+}
+
+/*
+Time Complexity:
+O(n)
+All the approaches will have equivalent time complexity, as we will be pushing/popping each node exactly once in all the approaches. 
+Thus, the time complexity will be O(n) where n = number of nodes in a generic tree.
+
+Space Complexity:
+O(n)
+We are using an auxiliary queue data structure for level order traversal. 
+At any time, the maximum size of the queue will be equal to the maximum nodes in any level of the generic tree. Thus, O(n) auxiliary space is used.
+*/
