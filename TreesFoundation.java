@@ -631,13 +631,61 @@ In addition to this, some extra space is also consumed due to the recursion stac
       return p1.get(i);
   }
 
+//Distance Between Two Nodes In A Generic Tree
+/*
+The problem here is to get the distance between the given two nodes present in the given input generic tree.
 
+The problem is based on the node to root path and lowest common ancestor problems discussed earlier. 
+Hence the previous problems are a strong pre-requisite for this problem. 
+To achieve our solution we need to get the node to root path for both nodes, 
+and thereafter all we need to do is to traverse the paths simultaneously till the point when the nodes are not common. 
+At this moment the distance between both the nodes is the sum of the number of nodes in between the LCA and the desired nodes.
+*/
+  public static int distanceBetweenNodes(Node node, int d1, int d2){
+      ArrayList<Integer> p1 = nodeToRootPath(node, d1);
+      ArrayList<Integer> p2 = nodeToRootPath(node, d2);
+      int i = p1.size() - 1;
+      int j = p2.size() - 1;
+      while(i >= 0 && j >= 0 && p1.get(i) == p2.get(j)){
+          i--;
+          j--;
+      }
+      i++;
+      j++;
+      //ans would be adding the distances between the common node to the given nodes
+      return i+j;
+  }
 
+//Are Trees Similar In Shape
+/*
+The problem here is to check whether the given two input generic trees are similar in shape or not. 
+The similarity in shape means that they have the same number of nodes at each level and the same connections for every node, values of the node are not a consideration for this particular problem.
 
+The idea is to traverse both the trees simultaneously and check for every node if the number of children for both the nodes are the same or not, 
+if not then there is no way that the tree can have a similar shape hence we return a false value and return from the code, 
+but if yes, we continue to recursively call for all children of the nodes to check whether the subtree are similar in shape or not.
 
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
 
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static boolean areSimilar(Node n1, Node n2) {
+      if(n1.children.size() != n2.children.size()){
+          return false;
+      }
+      for(int i = 0; i < n1.children.size() - 1; i++){
+          Node c1 = n1.children.get(i);
+          Node c2 = n2.children.get(i);
+          if(areSimilar(c1, c2) == false){
+              return false;
+          }
+      }
+      return true;
+  }
 
-
+//
 
 
 
