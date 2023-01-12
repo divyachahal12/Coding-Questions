@@ -359,7 +359,7 @@ public static void levelOrderLinewise3(Node node) {
   mq.add(node);
 
   while (mq.size() > 0) {
-    int cicl = mq.size();
+    int cicl = mq.size();//children in current level
     for (int i = 0; i < cicl; i++) {
       node = mq.remove();
       System.out.print(node.data + " ");
@@ -419,3 +419,62 @@ O(n)
 We are using an auxiliary queue data structure for level order traversal. 
 At any time, the maximum size of the queue will be equal to the maximum nodes in any level of the generic tree. Thus, O(n) auxiliary space is used.
 */
+
+
+//Mirror A Generic Tree
+/*
+The function is expected to create a mirror image of the tree. 
+
+To achieve this mirror image we will make the use of recursion. 
+The basic idea here is to reverse the order of nodes at every level. 
+To achieve this we will have to start reversing the levels from lowest to the topmost hence post traversal should be adopted. 
+If we reverse the above levels first, 
+      then we would get the wrong output as the reverse of the above levels will change the positioning of nodes at below levels 
+      hence we start reversing from the lowermost level coming way back to the root. 
+To reverse the order of nodes we can simply reverse the ArrayList containing the children for every node.
+
+Build Faith : We must have faith that if our code can give us an output for the entire generic tree, 
+              then it can definitely give as an output its subtree.
+              Those subtrees of that generic tree are considered where each root of that sub tree is a child of the root of the original generic tree. 
+The families of these sub trees should get reversed for getting the desired output. 
+
+Time Complexity: O(n)
+The time complexity for the function is linear as we post traversing the tree.
+
+Space Complexity: O(logn)
+The space complexity for the function is equal to the height of the tree due to the recursion stack.
+*/
+  public static void mirror(Node node){
+        for(Node child : node.children){
+            mirror(child);
+        }
+        
+        Collections.reverse(node.children);
+  }
+
+//Remove Leaves In Generic Tree
+/*
+The function is expected to remove all leaves from the tree.
+ 
+To achieve this we will be using preorder traversal and for every node, 
+we will be traversing all its children in the order of right to left and check each child to be a leaf or not, 
+if yes then we would remove that node from the ArrayList of children.
+
+The point here to note that we must traverse the children ArrayList from right to left direction, 
+the reason being if we traverse from left to right, then say for our above case for i = 0 we will be at the node with value 40 which is a leaf node, 
+deleting it will now alter the positioning of other nodes present in the ArrayList forming {30, 20} 
+and we also increment i =1 hence we get the node with value 20, 
+if we observe then we have missed node 30 hence we can get wrong results, 
+to prevent this situation we will be traversing in reverse order so that even if the order gets changed we would still always be at the correct index.
+*/
+  public static void removeLeaves(Node node) {
+      for(int i = node.children.size() -1; i >= 0; i--){
+          Node child = node.children.get(i);
+          if(child.children.size() == 0){
+              node.children.remove(child);
+          }
+      }
+      for(Node child: node.children){
+          removeLeaves(child);
+      }  
+  }
