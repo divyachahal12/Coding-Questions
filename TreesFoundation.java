@@ -478,3 +478,61 @@ to prevent this situation we will be traversing in reverse order so that even if
           removeLeaves(child);
       }  
   }
+/*
+Time Complexity: O(n)
+The time complexity for the function is linear as we are using preorder traversal.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+
+//Linearize A Generic Tree
+/*
+The problem here is to linearize the given input generic tree in a pre-order fashion where every node shall have only one child.
+
+The problem can be solved using recursion. 
+We keep our faith in recursion that whenever we call our linearize() function to our children it creates a linearize subtree. 
+Now if we call our linearize() function for all the children of our root node then we get all linearized subtrees. 
+Now our task at hand is to linearize the tree with respect to the root node. 
+As we know that we say that our tree is linearized when we have only one child remaining,
+so we will iterate over our root node children until we have a single child remaining. 
+While iterating we will do the following:
+
+1. Remove the last child from the root node.
+
+2. Fetch the second last child from the root node.
+
+3. Get the tail of the second last child by calling a function which traverse over the subtree until it reaches the leaf node.
+
+4. Attach the last child at the tail of the second last child.
+
+5. Repeat the steps until root has only one child left.
+
+This approach has a time complexity of O(n2) as for every node we are getting the tail of its subtree child which is also a linear function.
+*/
+  public static void linearize(Node node) {
+    for (Node child : node.children) {
+      linearize(child);
+    }
+    while (node.children.size() > 1) { //run loop till the children arraylist has only 1 child for root node in it
+      Node lc = node.children.remove(node.children.size() - 1);//lastChild
+      Node slc = node.children.get(node.children.size() - 1);//SecondLastChild
+      Node tail = GetTail(slc);
+      tail.children.add(lc);
+    }
+  }
+
+  //tail would be that node in Second last child, which has 0 children of itself, so that we can add last child of original node as its child
+  private static Node GetTail(Node node) {
+    while (node.children.size() == 1) {
+      node = node.children.get(0);
+    }
+    return node;
+  }
+
+//*******Do its optimisation code for O(N) time complexity from video
+
+//
+
+
+
