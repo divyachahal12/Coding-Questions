@@ -532,7 +532,113 @@ This approach has a time complexity of O(n2) as for every node we are getting th
 
 //*******Do its optimisation code for O(N) time complexity from video
 
-//
+//Find In Generic Tree
+/*
+The problem is relatively simple and based on traversals on the tree. 
+Here we only need to traverse the tree and check for every node whether the current node is the desired node or not. 
+If yes, then we return true and if we reach the end of the branch then we return false, 
+if in any case, we get true then we can simply return true without checking the rest of the branches.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the given tree due to the recursion stack.
+*/
+  public static boolean find(Node node, int data) {
+      if(node.data == data){
+          return true;
+      }
+      for(Node child : node.children){
+          boolean flag = find(child, data);
+          if(flag == true){
+              return true;
+          }
+      }
+      return false;
+  }
+
+//Node To Root Path In Generic Tree
+/*
+The function is expected to return in form of linked list the path from element to root, if the element with data is found.
+
+The problem is based on traversals on the tree. 
+Here we need to traverse the tree and check for every node whether the current node is the desired node or not. 
+If yes, then we return an ArrayList having the node value in it 
+and if we reach the end of the branch then we return an empty ArrayList 
+if in any case, we get a non-empty ArrayList then we add the current node to the list 
+and return immediately without considering the following branches as the search there would be redundant. 
+So in the end, we will have a path from the desired node then way back to the root node. 
+This problem is similar to our previous problem, 
+Find in a generic tree where we are finding the desired node if found 
+then instead of returning a Boolean this time we are returning an ArrayList containing the path.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the given tree due to the recursion stack.
+*/
+ public static ArrayList<Integer> nodeToRootPath(Node node, int data){
+        if(node.data == data){
+            ArrayList<Integer> base = new ArrayList<>();
+            base.add(node.data);
+            return base;
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        for(Node child : node.children){
+            ans = nodeToRootPath(child, data);
+            if(ans.size() != 0){
+                ans.add(node.data);
+                return ans;
+            }
+        }
+        return ans;
+ }
+
+//Lowest Common Ancestor (generic Tree)
+/*
+The function is expected to return the lowest common ancestor of two data values that are passed to it.
+ 
+The lowest common ancestor is the lowermost common node after which the branches for both nodes differ. 
+Alternatively, it can also be defined as the last common node in the node to the root path for both given nodes.
+
+The problem is based on the node to root path problem discussed earlier. 
+Our definition for LCA clearly shows its dependency on the node to the root path, hence the previous problem is a strong pre-requisite for this problem. 
+To achieve our solution we need to get the node to root path for both nodes, 
+and thereafter all we need to do is to traverse the paths simultaneously till the point when the nodes are not common. 
+At this moment the node just before the current node will be our lowest common ancestor.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(n)
+The space complexity for the function is linear as we are maintaining two paths which in the worst case can be equal to the size of the tree. 
+In addition to this, some extra space is also consumed due to the recursion stack.
+*/
+  public static int lca(Node node, int d1, int d2) {
+      ArrayList<Integer> p1 = nodeToRootPath(node, d1);
+      ArrayList<Integer> p2 = nodeToRootPath(node, d2);
+      int i = p1.size() - 1;
+      int j = p2.size() - 1;
+      while(i >= 0 && j >= 0 && p1.get(i) == p2.get(j)){
+          i--;
+          j--;
+      }
+      //to go back to previous same ancestor
+      i++;
+      j++;
+      return p1.get(i);
+  }
+
+
+
+
+
+
+
+
+
 
 
 
