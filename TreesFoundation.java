@@ -685,8 +685,44 @@ The space complexity for the function is proportional to the height of the tree 
       return true;
   }
 
-//
+//Are Trees Mirror In Shape
+/*
+The problem here is to check whether the given two input generic trees are the mirror in shape or not. 
+The mirror similarity in shape means that they have a similar shape when one of them is converted to its mirror image,
+values of the node are not a consideration for this particular problem.
 
+Our previous problems, are trees similar in shape and is tree mirror, are a strong pre-requisite for this problem. 
+There we check for the number of children nodes for the same position for both the trees, 
+but for this problem the conditions are different since we check for the mirror image, 
+so the idea is to treat one of the trees in a mirror-fashion and then apply similarity logic. 
+This implies that we are here only checking similarity in shape for a mirror-imaged tree 
+and a tree that is considered to be similar to the former trees mirror image. 
+Now as we know that the mirror image is achieved by reversing every node at each level, 
+hence, say for a particular node we will be comparing the first node of one tree with the last node of the other tree, 
+this step ensures that we are comparing taking the mirror image of one of the tree. 
+If at any point we get that the shapes are not similar then we return false, 
+as if one of the subtrees fails then the entire tree is destined to fail because there always will exist an irregularity.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static boolean areMirror(Node n1, Node n2) {
+      if(n1.children.size() != n2.children.size()){
+          return false;
+      }
+      for(int i = 0; i < n1.children.size(); i++){
+          int j = n1.children.size() - 1 - i;
+          Node c1 = n1.children.get(i);
+          Node c2 = n2.children.get(j);
+          if(areMirror(c1, c2) == false){
+              return false;
+          }
+      }
+      return true;
+  }
 
 
 
