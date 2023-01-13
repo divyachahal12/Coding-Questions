@@ -988,5 +988,96 @@ The space complexity for the function is proportional to the height of the tree 
       return factor;
   }
 
+//Node With Maximum Subtree Sum
+/*
+The problem here is to get the node having the maximum subtree sum in the given input generic tree.
+
+The idea here is to traverse the tree in a postorder fashion and for every node, 
+we need to calculate the sum of all the subtrees from this node, 
+after getting the sum we need to compare it with the global maxSum 
+if it exceeds the global maxSum then we need to update the maxSum and assign this node as the node with the maximum sum, 
+we need to do this step for each node on the tree and thereafter the node and the sum left with us at the end will be our desired result. 
+Also for every node, we need to return the subtree sum so that it can be used later on by its ancestors for computation for their subtree sum, 
+without visiting all the child nodes, again and again.
+
+This return step ensures that our algorithm has linear time complexity. 
+The other approach would be to calculate the sum for every node by calling the sum() function which would take the total time complexity of our code to n2.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the generic tree.
+*/
+  static int maxSumNode = 0;
+  static int maxSum = Integer.MIN_VALUE;
+  
+  static int returnSumAndCalcMaxSumNode(Node node){
+      int sum = 0;
+      for(Node child : node.children){
+          int childSum = returnSumAndCalcMaxSumNode(child);
+          sum += childSum;
+      }
+      sum += node.data;
+      if(sum > maxSum){
+          maxSumNode = node.data;
+          maxSum = sum;
+      }
+      return sum;
+  }
+
+//Diameter Of Generic Tree ***** IMP
+/*
+The problem here is to get the lowest common ancestor for the given two nodes present in the given input generic tree.
+
+The maximum number of edges between any two nodes of a generic tree is called the diameter of the tree.
+
+Suppose we wish to find the diameter from any particular node then as we know that we have to maximize the number of edges between any two nodes,
+this implies that to maximize the number of edges we have to always consider the leaf nodes. 
+If we say that without a leaf node we can form a diameter, 
+then if we consider the leaf node of that branch we will be taking care of additional nodes after our so-called end node 
+and henceforth our diameter result would get incremented, hence leaf nodes can only make diameter endpoints. 
+Now we wish to find a diameter that passes through our current node. 
+This can be found by adding the deepest subtree and second deepest subtree and adding 2 to their sum. 
+Getting the deepest and second deepest subtree ensures that we are taking maximum possible edges from the current node and 2 is added to link both leaves.
+
+Now we can recurse this approach for every node in our tree as our diameter need not always pass through the root node. 
+So at each node, we calculate the diameter from the current node and compare it with the global maximum 
+and then we return the height of our subtree which can, later on, be used by our ancestor nodes to calculate their diameter and height. 
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(h)
+The space complexity for the function is proportional to the height of the generic tree due to the recursion stack.
+*/
+  static int dia = Integer.MIN_VALUE;
+  static int calcDiaReturnHeight(Node node) {
+    int dch = -1;//deepestChildHeight
+    int sdch = -1;//secondDeepestChildHeight
+    for (Node child : node.children) {
+      int childHeight = calcDiaReturnHeight(child);
+      if (childHeight > dch) {
+        sdch = dch;
+        dch = childHeight;
+      } else if (childHeight > sdch) {
+        sdch = childHeight;
+      }
+    }
+    int cand = dch + sdch + 2;//candidate
+    if (cand > dia) {
+      dia = cand;
+    }
+    dch += 1;
+    return dch;
+  }
+
+//
+
+
+
+
+
+
 
 
