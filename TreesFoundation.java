@@ -960,8 +960,33 @@ The space complexity for the function is proportional to the height of the tree 
       }
   }
 
-//
+//Kth Largest Element In Tree
+/*
+The problem here is to find the kTh largest element in the input generic tree.
 
+As we already know that the floor() function returns the closest integer less than or equal to a given number. 
+This means if we find the floor for Integer.MAX_VALUE then we would get the largest element in the tree, 
+and if we find the floor of the largest element of the tree then we would always get the second largest value from the tree and so on. 
+This implies that if we get the floor of the (k-1)Th element then we would get the kTh largest element in the given generic tree.
+
+So here we need to exploit this property of floor() function to get our kTh largest element in the tree.
+
+Time Complexity: O(k*n)
+The time complexity for the function is k times linear as tree traversal is called k times to find the kTh largest element in the tree.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static int kthLargest(Node node, int k){
+      floor = Integer.MIN_VALUE;
+      int factor = Integer.MAX_VALUE;
+      for(int i = 0; i < k; i++){
+          ceilAndFloor(node, factor);
+          factor = floor;
+          floor = Integer.MIN_VALUE;
+      }
+      return factor;
+  }
 
 
 
