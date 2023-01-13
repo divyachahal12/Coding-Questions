@@ -724,5 +724,54 @@ The space complexity for the function is proportional to the height of the tree 
       return true;
   }
 
+//Is Generic Tree Symmetric
+/*
+The problem here is to find whether the given tree is symmetric or not.
+
+When we fold the tree along its vertical axis passing through the root node, 
+if the left half overlaps the right half then the tree is said to be symmetric. 
+If we carefully observe then alternatively we can also say 
+that a tree is symmetric whenever the left half of the tree is the mirror image of the right half of the tree. 
+This happens since when we say that we fold the tree, 
+this means that we are inverting the tree of the left half and then superimposing on the right half, 
+which is the same as having a mirror image superimposed.
+
+Hence our problem is now reduced to only finding whether our left subtree is the mirror image of the right subtree or not, 
+alternatively, we can also check for whether our tree is the mirror image of itself or not.
+
+The Are trees mirror in shape problem, which we have discussed earlier is a pre-requisite for this problem.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static boolean isMirror(Node n1, Node n2){
+      if(n1.children.size() != n2.children.size()){
+          return false;
+      }
+      for(int i = 0; i < n1.children.size(); i++){
+          int j = n1.children.size() - 1 - i;
+          Node c1 = n1.children.get(i);
+          Node c2 = n2.children.get(j);
+          if(isMirror(c1, c2) == false){
+              return false;
+          }
+      }
+      return true;
+  }
+  public static boolean IsSymmetric(Node node) {
+      return isMirror(node, node);
+  }
+
+
+
+
+
+
+
+
+
 
 
