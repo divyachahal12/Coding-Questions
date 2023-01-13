@@ -765,12 +765,202 @@ The space complexity for the function is proportional to the height of the tree 
       return isMirror(node, node);
   }
 
+//Multisolver for Generic Tree
+/*
+Previously we calculated size, height, min and max using recursion.
+
+Here, we will use data members and will keep changing their values. That is we are going to traverse through a tree but not return anything.
+
+Observe that we kept the Node class, display function and construction function as the same.
+
+We want you to focus on the multisolver function.
+
+1.We declare some properties of size, min, max and height. 
+These values are always available in heap and do not need to be passed in recursion.
+2.We define our previously declared properties in the main function with default values. 
+Hence, size is initialized as 0, min as +8, max as -8 and height as 0.
+3.The function of multisolver is passed 2 parameters, a node and depth. This depth variable is present in the stack.
+4.We change the values of our previously defined variables in the pre area of our recursive function. 
+Here, with each traversal the size is increased by one. The min and max values are compared with the data of the node and accordingly changed. 
+And the value of height is the maximum of previous height and the depth. 
+Height is declared in heap and Depth is in stack.
+5.The function multisolver is called recursively for all the children of the node and the depth is increased with each call.
+
+Time Complexity:
+O(n)
+Space Complexity:
+O(1)
+*/
+import java.io.*;
+
+import java.util.*;
+
+public class Main {
+  private static class Node {
+    int data;
+    ArrayList< Node> children = new ArrayList< >();
+  }
+
+  public static void display(Node node) {
+    String str = node.data + " -> ";
+    for (Node child : node.children) {
+      str += child.data + ", ";
+    }
+    str += ".";
+    System.out.println(str);
+
+    for (Node child : node.children) {
+      display(child);
+    }
+  }
+
+  public static Node construct(int[] arr) {
+    Node root = null;
+
+    Stack< Node> st = new Stack< >();
+    for (int i = 0; i < arr.length; i++) {
+      if (arr[i] == -1) {
+        st.pop();
+      } else {
+        Node t = new Node();
+        t.data = arr[i];
+
+        if (st.size() > 0) {
+          st.peek().children.add(t);
+        } else {
+          root = t;
+        }
+
+        st.push(t);
+      }
+    }
+
+    return root;
+  }
+  //******************************MULTISOLVER*******************************
+
+  static int size;        //1
+  static int min;
+  static int max;
+  static int height;
+
+  public static void multisolver(Node node, int depth) { //3
+
+    size++;  //4
+    min = Math.min(min, node.data);
+    max = Math.max(max, node.data);
+    height = Math.max(height, depth);
+
+    for (Node child : node.children) { //5
+      multisolver(child, depth + 1);
+    }
+  }
 
 
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int n = Integer.parseInt(br.readLine());
+    int[] arr = new int[n];
+    String[] values = br.readLine().split(" ");
+    for (int i = 0; i < n; i++) {
+      arr[i] = Integer.parseInt(values[i]);
+    }
 
+    Node root = construct(arr);
 
+    size = 0;         //2
+    min = Integer.MAX_VALUE;
+    max = Integer.MIN_VALUE;
+    height = 0;
 
+    multisolver(root, 0);
 
+    System.out.println("Size=" + size);
+    System.out.println("Min=" + min);
+    System.out.println("Max=" + max);
+    System.out.println("Height=" + height);
+  }
+
+}
+
+//Predecessor And Successor Of An Element
+/*
+The problem here is to find the preorder predecessor and successor for the given node in a given input generic tree.
+
+The intuition behind this problem is to apply a preorder traversal to the generic tree. 
+Now that we are traversing the tree we need to constantly check for the nodes to be predecessor, current node, or successor if any. 
+So for that, we will be making use of some global variables. 
+The idea behind using globals variables is that it eases our task in recursive calls, as it avoids extra parameters during function calls.
+
+Here we will maintain a state variable that will let us know whether this node is a predecessor or successor. 
+Initially, we set the value of the state variable to be 0. Now we traverse the tree in a preorder fashion till the point we reach the current node. 
+When we reach the current node we immediately increment the state variable which ensures that our predecessor global variable remains fixed from now on. 
+Now similar is the case immediately after the current element, 
+  as the next node after the current element is our successor so we store the result and increment the state variable, and hence we get our results.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  static Node predecessor;
+  static Node successor;
+  static int state;
+  public static void predecessorAndSuccessor(Node node, int data) {
+      if(state == 0){
+          if(node.data == data){
+              state = 1;
+          }else{
+              predecessor = node;
+          }
+      }else if(state == 1){
+          successor = node;
+          state++;
+      }
+      for(Node child : node.children){
+          predecessorAndSuccessor(child, data);
+      }
+  }
+
+//Ceil And Floor In Generic Tree
+/*
+The problem here is to find the ceil and floor values for the given node in the input generic tree.
+
+To understand the problem better firstly we will try to understand the terms ceil and floor. 
+The ceil() function returns the smallest integer value that is bigger than or equal to a number. 
+The floor() function returns the closest integer less than or equal to a given number.
+
+The idea here is to traverse the tree, either in a preorder fashion or in a postorder fashion, 
+the way of traversal does not matter, all it matters is that we consider every possible node. 
+Now for every node we just need to check whether the node can be a possible ceil value or floor value or not, 
+if yes then we need to update our corresponding variables for the same.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  static int ceil;//ceil is just above i.e. smallest among all larger values
+  static int floor;//floor is just below i.e. largest among all smaller values
+  public static void ceilAndFloor(Node node, int data) {
+      if(node.data > data){//larger values
+          if(node.data < ceil){
+              ceil = node.data;
+          }
+      }
+      else if(node.data < data){//smaller values
+          if(node.data > floor){
+              floor = node.data;
+          }
+      }
+      for(Node child : node.children){
+          ceilAndFloor(child, data);
+      }
+  }
+
+//
 
 
 
