@@ -1127,6 +1127,113 @@ The space complexity for the function is proportional to the height of the stack
     System.out.println(post);
   }
 
+//ITERABLE AND ITERATOR
+/*
+We wish to print the tree in a preorder using a command
+We want the function to directly return all the elements in the tree in preorder without the use of indices. 
+GENERIC TREE CLASS:
+We make this class to represent the entire generic tree.
+We wrap the root property in this class. This is done so that we can apply our loop on the "tree" and not on the "root". 
+It has no other reason other than to be semantically correct.
+
+INTERFACES :
+An interface is a mechanism which contains just the method of those functions but not the body.
+The purpose of these interfaces is to define the signature of the functions.
+
+OBJECT OF INTERFACE:
+We cannot make an object of the Interface using "new".
+I obj=new I ( ); is NOT the correct way of making an object for an Interface I.
+Hence, in the reference/object of Interface we catch the instance of the class implementing it. Then we can call the required function for our object
+
+ITERABLE :
+In Java an Interface called "Iterable" is present. We implement this interface when we want to use a loop like the one we want for our generic tree.
+It has only a function declared in its body which returns an object of type Iterator and the name of the function is "iterator()". It doesn't take any parameters.
+Hence, the class of Generic Tree implements this Iterable interface. We also define this iterator function in our class.
+
+ITERATOR :
+Iterator interface contains 2 important functions:
+hasNext()- It returns a Boolean value which tells us whether the next value is present or not.
+next()- It returns the next value.
+we check if the Iterator "gti" has a next value and if it does then we print that next value of "gti".
+We now define the hasNext() and next() functions for the class "GTPreorderIterator" which implements the Iterator interface.
+*/
+public static class GenericTree implements Iterable< Integer> {
+  Node root;
+
+  GenericTree(Node root) {
+    this.root = root
+  }
+  public Iterator< Integer> iterator() {
+    Iterator< Integer> obj = new GTPreorderIterator();
+    return obj;
+  }
+}
+//hasNext() function
+public boolean hasNext()
+{
+  if (nval == null)
+  {
+    return false;
+
+  } else
+  {
+    return false;
+  }
+}
+
+//next() function
+public Integer next() {
+  Integer fr = nval;
+  // moves nval forward, if not possible sets it to null
+  nval = null;
+  while (st.size() > 0) {
+    Pair top = st.peek();
+    if (top.state == -1) {
+      nval = top.node.data;
+      top.state++;
+      break;
+    }
+    else if (top.state >= 0 && top.state < top.node.children.size()) {
+      Pair cp = new Pair(top.node.children.get(top.state), -1);
+      st.push(cp);
+      top.state++;
+
+    }
+    else {
+      st.pop();
+    }
+  }
+  return fr;
+}
+}
+
+//CLASS PAIR
+private static class Pair {
+  Node node;
+  int state;
+  Pair(Node node, int state) {
+    this.node = node;
+    this.state = state;
+  }
+}
+
+
+
+
+
+
+
+
+/*-----------------------BINARY TREES--------------------------------*/
+
+
+
+
+
+
+
+
+
 
 
 
