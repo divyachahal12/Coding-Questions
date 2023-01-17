@@ -1072,7 +1072,60 @@ The space complexity for the function is proportional to the height of the gener
     return dch;
   }
 
-//
+//Iterative Preorder And Postorder Of Generic Tree
+/*
+The problem here is to traverse the given input generic tree iteratively. We need to perform both pre-order and post-order traversal iteratively.
+
+To achieve this, we are creating a class that will be storing the node along with its state (integer data type). 
+The state represents the Eulers tree state at any instance of time. 
+If state == -1 then it would mean that we are visiting this node for the first time hence a pre-order state 
+and when the state value ranges from 0 to [node.children.size() - 1] 
+      these are the values indicating that we need to put the (state) index child in the stack (call for this child in case of the recursion). 
+When state == node.children.size() this means that we have considered all the children of this node, 
+      this also implies that this node is in post-order condition.
+
+The algorithm deals with taking a stack that will mimic the recursion stack for our traversal and initially we will be pushing (root, -1). 
+Now we will iterate over the stack till the stack becomes empty and for every iteration, 
+we will consider the state of the top of the stack node and its state will decide the action to be taken as mentioned above.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the stack.
+*/
+  static class Pair {
+    Node node;
+    int state;
+
+    Pair(Node node, int state) {
+      this.node = node;
+      this.state = state;
+    }
+  }
+  public static void IterativePreandPostOrder(Node node) {
+    Stack<Pair> st = new Stack<>();
+    st.push(new Pair(node, -1));
+            String pre = "";
+            String post = "";
+
+    while (st.size() > 0) {
+    Pair top = st.peek();
+      if (top.state == -1) {
+        pre += top.node.data + " ";
+        top.state++;
+      } else if (top.state == top.node.children.size()) {
+        post += top.node.data + " ";
+        st.pop();
+      } else {
+        Pair childPair = new Pair(top.node.children.get(top.state), -1);
+        st.push(childPair);
+        top.state++;//top is still parent node here, it'll change to its child in next iteration
+      }
+    }
+    System.out.println(pre);
+    System.out.println(post);
+  }
 
 
 
