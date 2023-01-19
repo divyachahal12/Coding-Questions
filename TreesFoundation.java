@@ -1239,6 +1239,81 @@ public class Main{
       
 }
 
+//Binary Tree Constructor
+/*
+The algorithm deals with taking a stack and initially we will be pushing (root, 1).
+
+To achieve this, we create a class that will be storing the node along with its state (integer data type). 
+The state represents the Euler's tree state at any instance of time.
+
+If state == 1 of the node at the top of the stack then it means that the next element of the array will represent the left of the top node. 
+And therefore we will place it at the left of this node.
+
+After that we increment the value of state to 2 and also push the new node into the stack with stage initialized to 1.
+
+In addition, when the state value is 2, it indicates that the next element of the array is the right of the node at top. 
+And therefore we will place it at the right of this node.
+
+After that we increment the value of state to 3 and also push the new node into the stack with stage initialized to 1.
+
+Furthermore, when state == 3 this means that it is time to pop the node out of the stack as at this point
+we have dealt with both right and left child and placed them at their correct position.
+
+Now we will iterate over the stack till the stack becomes empty 
+and for every iteration we will consider the state of the top of the stack node and its state will decide the action to be taken as mentioned above.
+
+Time Complexity:
+O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity. Also each element is pushed and popped out only once.
+
+Space Complexity:
+O(n)
+The space complexity for the function is proportional to the space used by stack, which can be O(n) at max.//doubt
+*/
+public static class Pair{
+    Node node;
+    int state;
+    Pair(Node node, int state){
+        this.node = node;
+        this.state = state;
+    }
+}
+public static void main(String[] args) throws Exception{
+    Integer arr[] = {50, 25, 12, null, null, 37, 30, null, null, null, 75, 62, null, 70, null, null, 87, null, null};
+    
+    Node root = new Node(arr[0], null, null);
+    Pair rootPair = new Pair(root, 1);
+    Stack<Pair> st = new Stack<>();
+    st.push(rootPair);
+    int idx = 0;
+    //state 1 for left, state 2 for right
+    while(st.size() > 0){
+        Pair top = st.peek();
+        if(top.state == 1){
+            idx++;
+            if(arr[idx] != null){
+                top.node.left = new Node(arr[idx], null, null);
+                Pair leftPair = new Pair(top.node.left, 1);
+                st.push(leftPair);
+            }else{//arr[idx] == null
+                top.node.left = null;
+            }
+            top.state++;
+        }else if(top.state == 2){
+            idx++;
+            if(arr[idx] != null){
+                top.node.right = new Node(arr[idx], null, null);
+                Pair rightPair = new Pair(top.node.right, 1);
+                st.push(rightPair);
+            }else{//arr[idx] == null
+                top.node.right = null;
+            }
+            top.state++;
+        }else{//state == 3
+            st.pop();
+        }
+    }
+}
 
 
 
