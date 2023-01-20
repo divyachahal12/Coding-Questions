@@ -1376,11 +1376,50 @@ The space complexity for the function is proportional to the height of the tree 
       return Math.max(height(node.left), height(node.right)) + 1;
   }
 
-//
+//Traversals in a Binary Tree
+  public static void traversals(Node node){
+      if(node == null){
+          return;
+      }
+      System.out.println(node.data + " in PreOrder");
+      traversals(node.left);
+      System.out.println(node.data + " in InOrder");
+      traversals(node.right);
+      System.out.println(node.data + " in PostOrder");
+  }
 
+//Levelorder Traversal Of Binary Tree
+/*
+We will use Queue to solve this problem.
+After that we use the rule; RPA: Remove, Print and Add to operate the queue as we have seen in Generic Trees.
+This rule says that, remove the element from the queue, print that element and then add its children to the queue.
+Here, we continue this process for all the elements of a queue at a time. This means that the loop is iterated for all the children at a level.
+Initially the root of the generic tree is added to the Queue. 
 
+Time Complexity:O(n)
+The time complexity is linear due to the n number of nodes in the binary tree.
 
-
+Space Complexity:O(n)
+The space complexity is linear due to the n number of nodes in the binary tree.
+*/
+  public static void levelOrder(Node node) {
+    Queue<Node> mainQueue = new ArrayDeque<>();
+    mainQueue.add(node);
+    while(mainQueue.size() > 0){
+        int count = mainQueue.size();
+        for(int i = 0; i < count; i++){
+            node = mainQueue.remove();
+            System.out.print(node.data +" ");
+            if(node.left != null){
+                mainQueue.add(node.left);
+            }
+            if(node.right != null){
+                mainQueue.add(node.right);
+            }
+        }
+        System.out.println();
+    }
+  }
 
 
 
