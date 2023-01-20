@@ -1262,12 +1262,10 @@ we have dealt with both right and left child and placed them at their correct po
 Now we will iterate over the stack till the stack becomes empty 
 and for every iteration we will consider the state of the top of the stack node and its state will decide the action to be taken as mentioned above.
 
-Time Complexity:
-O(n)
+Time Complexity:O(n)
 The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity. Also each element is pushed and popped out only once.
 
-Space Complexity:
-O(n)
+Space Complexity:O(n)
 The space complexity for the function is proportional to the space used by stack, which can be O(n) at max.//doubt
 */
 public static class Pair{
@@ -1315,10 +1313,70 @@ public static void main(String[] args) throws Exception{
     }
 }
 
+//Display Binary Tree
+/*
+IMP-> Generic tree don't have null node base as calls are made till the children.size() != 0, But for Binary Tree we need to have null node as base case
 
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
 
+Space Complexity: O(n)
+The space complexity for the function is proportional to the space used by the recursion stack, which can be O(n) at max.//doubt
+*/
+public static void display(Node root){
+    if(node == null){
+        return;
+    }
+    //self work
+    String str = "";
+    str += node.left == null ? "." : node.left.data +"";//if(node.left == null){str += "."; }else{ str += node.left.data + "";}
+    str += " <- " + node.data + " -> ";
+    str += node.right == null ? "." : node.right.data +"";
+    System.out.println(str);
+    
+    //call left child
+    display(node.left);
+    //call right child
+    display(node.right);
+}
 
+//Size, Sum, Maximum And Height Of A Binary Tree
+/*
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
 
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static int size(Node node) {
+      if(node == null){
+          return 0;
+      }
+      return size(node.left) + size(node.right) + 1;
+  }
+
+  public static int sum(Node node) {
+      if(node == null){
+          return 0;
+      }
+      return sum(node.left) + sum(node.right) + node.data;
+  }
+
+  public static int max(Node node) {
+      if(node == null){
+          return Integer.MIN_VALUE;
+      }
+      return Math.max(node.data, Math.max(max(node.left), max(node.right)));
+  }
+
+  public static int height(Node node) {
+      if(node == null){
+          return -1;
+      }
+      return Math.max(height(node.left), height(node.right)) + 1;
+  }
+
+//
 
 
 
