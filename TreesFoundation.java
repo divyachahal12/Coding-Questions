@@ -1505,8 +1505,35 @@ The space complexity for the function is proportional to the height of the tree 
       return ans;
   }
 
+//Print K Levels Down
+/*
+The problem here deals with printing the nodes which are at a distance k away from the root node in a preorder fashion.
 
+To achieve this we will use preorder traversal on the binary tree. 
+For every node we will check whether the distance from the root node is K or not, 
+if yes then we would print the node and return, as there is no point going to levels below K. 
+If not, then we would recursively call for left subtree and right subtree which are a level down. 
+Moreover, our base case will handle cases when we hit a null node or if K becomes less than 0, then in this case we will simply return from function calls.
+Passing K as a function argument helps us to check the distance of the current node from the root node without calling any helper function 
+to calculate the distance between two nodes, this ensures that our algorithm works in linear time complexity.
 
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
 
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static void printKLevelsDown(Node node, int k){
+      if( node == null || k < 0){
+          return;
+      }
+      if(k == 0){
+          System.out.println(node.data);
+      }
+      printKLevelsDown(node.left, k - 1);
+      printKLevelsDown(node.right, k - 1);
+  }
+
+//
 
 
