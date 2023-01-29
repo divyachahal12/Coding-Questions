@@ -1465,5 +1465,48 @@ The space complexity is linear due to the use of stack space.
     System.out.println(post);
   }
 
-//
+//Find And Node to rootpath In Binary Tree
+/*
+The problem is based on traversals on the tree. 
+Here we only need to traverse the tree and check for every node whether the current node is the desired node or not. 
+If yes, then we return true and if we reach the end of the branch then we return false, 
+if in any case, we get true then we can simply return true without checking the rest of the branches.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static boolean find(Node node, int data, ArrayList<Integer> ans){
+      if(node == null){
+          return false;
+      }
+      if(node.data == data){
+          ans.add(node.data);
+          return true;
+      }
+      boolean flc = find(node.left, data, ans);
+      if(flc == true){
+          ans.add(node.data);
+          return true;
+      }
+      boolean frc = find(node.right, data, ans);
+      if(frc == true){
+          ans.add(node.data);
+          return true;
+      }
+      return false;
+  }
+
+  public static ArrayList<Integer> nodeToRootPath(Node node, int data){
+      ArrayList<Integer> ans = new ArrayList<>();
+      boolean res = find(node, data, ans);
+      return ans;
+  }
+
+
+
+
+
 
