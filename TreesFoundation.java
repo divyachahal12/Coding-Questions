@@ -1421,7 +1421,49 @@ The space complexity is linear due to the n number of nodes in the binary tree.
     }
   }
 
+//Iterative Pre, Post And Inorder Traversals Of Binary Tree
+/*
+Time Complexity:O(n)
+The time complexity is linear due to the traversals in the Binary Tree.
 
+Space Complexity:O(n)
+The space complexity is linear due to the use of stack space.
+*/
+  public static void iterativePrePostInTraversal(Node node) {
+    Stack<Pair> st = new Stack<>();
+    Pair rootPair = new Pair(node, 1);
+    st.push(rootPair);
+    String pre = "";
+    String in = "";
+    String post = "";
+    while (st.size() != 0) {
+      Pair top = st.peek();
+      if (top.state == 1) { //pre, s++, left add
+        pre += top.node.data + " ";
+        top.state++;
 
+        if (top.node.left != null) {
+          Pair lc = new Pair(top.node.left, 1);
+          st.push(lc);
+        }
+      } else if (top.state == 2) { //in, s++, right add
+        in += top.node.data + " ";
+        top.state++;
 
+        if (top.node.right != null) {
+          Pair rc = new Pair(top.node.right, 1);
+          st.push(rc);
+        }
+      } else { //post, pop
+        post += top.node.data + " ";
+        st.pop();
+      }
+    }
+
+    System.out.println(pre);
+    System.out.println(in);
+    System.out.println(post);
+  }
+
+//
 
