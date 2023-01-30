@@ -1693,5 +1693,79 @@ Although, there is still recursion call stack space of O(d) where d = maximum de
       return node;
   }
 
+//Print Single Child Nodes
+/*
+The function is expected to print in separate lines, all such nodes which are only child of their parent. Use preorder for traversal.
+
+High-Level Thinking:
+Expectation: We expect that the function printSingleChildNodes(n,p) 
+             will print all those nodes who are the only child of their parents where n is the node and p is its parent.
+Faith: Have a look at the image shown below (fig-2). 
+       We have faith on the recursion that if we call upon the left sub-tree, 
+       we will be able to print all the single child nodes in the left subtree 
+       and if we call upon the right subtree then recursion will print all the child nodes of the right subtree. 
+       As discussed above also, the root node cannot be a single child node as it has no parent. 
+       So, we don't need to check anything for the root node. So, there is no need for any relation in this recursion.
+Note: We have been applying this check for every node and we will apply this check for every node except the root node. 
+      This is because the root node does not have any parent. 
+      So, we can say that we will apply this check only if the parent is not equal to null i.e. the node is not a root node.
+Time Complexity:
+The time complexity of the above code is O(n) as we are traversing every node in the binary tree to check whether it is a single child or not.
+Space Complexity:
+The space complexity of the above solution is O(1) as we are not using any extra data structure or memory. 
+If we consider the recursion space then 
+      the time complexity of the above solution will become O(log2n) as the maximum height of the stack at any point of time will be O(log2n) 
+      which is also the height of the tree.
+*/
+  public static void printSingleChildNodes(Node node, Node parent){
+      if(node == null){
+          return;
+      }
+      if(parent != null && parent.left == node && parent.right == null){
+          System.out.println(node.data);
+      }else if(parent != null && parent.left == null && parent.right == node){
+          System.out.println(node.data);
+      }
+      printSingleChildNodes(node.left, node);
+      printSingleChildNodes(node.right, node);
+  }
+
+//Remove Leaves In Binary Tree
+/*
+High-Level Thinking:
+Expectation: We expect that the function removeLeaves() when passed with the root node as a parameter will remove all the leaf nodes from the tree 
+             and return the new root node for the tree.
+Faith:  We have to remove the leaf nodes from the tree. 
+So, we say that if we remove all the leaf nodes from the left subtree and the right subtree then all the leaves will be removed from the tree.
+
+Time Complexity:
+The time complexity of the above solution is O(n) as we are visiting every node in the tree to check whether it is a leaf node or not.
+
+Space Complexity:
+The space complexity of the above solution is O(1) as we are not using any extra data structure or memory. 
+If we consider the recursion space then the time complexity of the above solution will become O(log2n) 
+as the maximum height of the stack at any point of time will be O(log2n) which is also the height of the tree.
+
+*/
+  public static Node removeLeaves(Node node){
+      if(node == null){
+          return null;
+      }
+      if(node.left == null && node.right == null){
+          return null;
+      }
+      node.left = removeLeaves(node.left);
+      node.right = removeLeaves(node.right);
+      return node;
+  }
+
+//
+
+
+
+
+
+
+
 
 
