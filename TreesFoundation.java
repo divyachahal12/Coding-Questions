@@ -1759,13 +1759,113 @@ as the maximum height of the stack at any point of time will be O(log2n) which i
       return node;
   }
 
+//Diameter Of A Binary Tree
+/*
+The function is expected to return the number of edges between two nodes which are farthest from each other in terms of edges.
+The diameter is defined as the maximum number of edges between any two nodes in the tree.
+We need to maximize the number of edges between any two nodes to calculate diameter.
+To be noted that to maximize the number of edges we have to always consider the leaf nodes.
+Now we wish to find the diameter that passes through our current node.
+This can be found by adding the height of the deepest node in the left subtree and height of deepest node in right subtree and adding 2 to their sum. 
+We call this as factor 1.
+But there is a possibility that a larger diameter is present entirely in either the left subtree or right subtree.
+Let's call factor 2 to be the diameter in the left subtree. So this represents the scenario when both the deepest nodes lie in the left subtree.
+And factor 3 is the diameter in the right subtree. This represents the scenario when both the deepest nodes lie in the right subtree.
+The final result will be the maximum of these three factors.
+Now we can recurse this approach for every node in our tree as our diameter does not always pass through the root node. 
+So at each node, we calculate the diameter using all three factors and compare them and return the maximum value.
+
+Time Complexity:O(n^2)
+The time complexity for the function is exponential as we have discussed this above.
+
+Space Complexity:O(n)
+The space complexity for the function is proportional to the height of the recursion stack which can be O(n) at max.
+
+Yes, that works right but this is not the efficient way of doing it. 
+Why?
+Initially we make 2 recursive calls for left diameter (ld) and right diameter (rd), 
+until this it's still alright but when we calculate factor 1 (f1) and make 2 more recursive calls to calculate height of left and right subtree 
+then the time complexity of the function immediately shoots from O(n) to O(n^2).
+
+What do we do now?
+Our above function is making recursive calls separately for calculating diameter and height of both left and right subtree.
+If somehow, we manage to calculate both diameter and height in the same recursive call then we may reduce the time complexity to O(n).
+*/
+  public static int height(Node node) {
+    if (node == null) {
+      return -1;
+    }
+
+    int lh = height(node.left);
+    int rh = height(node.right);
+
+    int th = Math.max(lh, rh) + 1;
+    return th;
+  }
+
+  public static int diameter1(Node node) {
+      if(node == null){
+          return 0;
+      }
+      //left max distance b/w nodes
+      int ld = diameter1(node.left);
+      //right max distance b/w nodes
+      int rd = diameter1(node.right);
+      //distance b/w left's and right's deepest nodes
+      int f = height(node.left) + height(node.right) + 2;
+      
+      int ans = Math.max(f, Math.max(ld, rd));
+      return ans;
+  }
+
+/* EFFICIENT APPROACH */
+/*
+To start with, this function has a return type of DPair, so that each recursive call can return both height and diameter to further calculate our result.
+
+Also it's obvious that two recursive calls will be made to both left and right of the given node 
+and since the return type is Dpair we store the result of each call in variables left pair (lp) and right pair (rp) of type Dpair.
+
+We have faith that both these pairs store the information i.e. diameter and height at each call, which we need to calculate our result, 
+so we do the required calculation by accessing this stored information.
+As at leaf nodes no further calls could be made so whenever node becomes null, 
+we will initialize a Dpair bp (base pair)and set the values of height and diameter as -1 (because there is no node) and 0 respectively 
+and return this base pair.
+
+Time Complexity:O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity:O(n)
+The space complexity for the function is proportional to the height of the recursion stack which can be O(n) at max.
+*/
+  static class DPair{
+      int ht;
+      int dia;   
+  }
+  public static DPair diameter(Node node){
+      if(node == null){
+          DPair base = new DPair();
+          base.ht = -1;
+          base.dia = 0;
+          return base;
+      }
+      DPair lp = diameter(node.left);
+      DPair rp = diameter(node.right);
+      
+      DPair myPair = new DPair();
+      myPair.ht = Math.max(lp.ht, rp.ht) + 1;
+      myPair.dia = Math.max(lp.ht + rp.ht + 2, Math.max(lp.dia, rp.dia));
+      
+      return myPair;
+  }
+  public static int diameter1(Node node) {
+      if(node == null){
+          return 0;
+      }
+      DPair ans = diameter(node);
+      return ans.dia;
+  }
+
 //
-
-
-
-
-
-
 
 
 
