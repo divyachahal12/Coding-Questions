@@ -1534,6 +1534,164 @@ The space complexity for the function is proportional to the height of the tree 
       printKLevelsDown(node.right, k - 1);
   }
 
-//
+//Print Nodes K Distance Away
+/*
+The function is expected to print all nodes which are k distance away in any direction from node with value equal to data.
+
+Time Complexity:O(n)
+*/
+  public static ArrayList<Node> findNodeToRoot(Node node, int data){
+      if(node == null){
+          return new ArrayList<>();
+      }
+      if(node.data == data){
+          ArrayList<Node> ans = new ArrayList<>();
+          ans.add(node);
+          return ans;
+      }
+      ArrayList<Node> leftChild = findNodeToRoot(node.left, data);
+      if(leftChild.size() != 0){
+          leftChild.add(node);
+          return leftChild;
+      }
+      ArrayList<Node> rightChild = findNodeToRoot(node.right, data);
+      if(rightChild.size() != 0){
+          rightChild.add(node);
+          return rightChild;
+      }
+      return new ArrayList<>();
+  }
+  public static void printKLevelsDown(Node node, int k, Node block){
+      if(node == null || k < 0 || node == block){
+          return;
+      }
+      if(k == 0){
+          System.out.println(node.data);
+          return;
+      }
+      printKLevelsDown(node.left, k - 1, block);
+      printKLevelsDown(node.right, k - 1, block);
+  }
+  public static void printKNodesFar(Node node, int data, int k) {
+      ArrayList<Node> path = findNodeToRoot(node, data);
+      for(int i = 0; i < path.size(); i++){
+          printKLevelsDown(path.get(i), k - i, i == 0 ? null : path.get(i - 1));
+      }
+  }
+
+//Path To Leaf From Root In Range
+/*
+The function is expected to print all paths from root to leaves which have sum of nodes in range from lo to hi (both inclusive).
+
+We check whether we have reached the leaf node by checking if both its children are null.
+We need to add the current node to the sum because it wasn't included in the previous recursion call.
+Now we check whether the sum of the given path lies in the given range between lo and hi (both inclusive). 
+If it does then the path is printed by adding the current node to the path because we didn't include that node when we made our previous recursion call.
+We call the recursive function on the left node of the current node. 
+The data of that node is included in the path so far and arithmetically added to the sum so far. 
+Similarly , it is called on the right node of the current node. 
+The data of that node is included in the path so far and arithmetically added to the sum so far
+*/
+  public static void pathToLeafFromRoot(Node node, String path, int sum, int lo, int hi){
+      if(node == null){
+          return;
+      }
+      if(node.left == null && node.right == null){
+          sum += node.data;
+          if(sum >= lo && sum <= hi){
+              System.out.println(path + node.data);
+          }
+          return;
+      }
+      pathToLeafFromRoot(node.left, path + node.data + " ", sum + node.data, lo, hi);
+      pathToLeafFromRoot(node.right, path + node.data + " ", sum + node.data, lo, hi);
+  }
+
+//Transform To Left-cloned Tree
+/*
+The function is expected to create a new node for every node equal in value to it and inserted between itself and it's left child.
+
+Expectation: I need my entire tree rooted at node to transform into a left cloned tree.
+      createLeftCloneTree(node)
+Faith: I will have faith on the left and right subtrees that they know how to transform into a left-cloned tree.
+      leftcloned = createLeftCloneTree(node.left)
+      rightcloned = createLeftCloneTree(node.right)
+Meeting Expectation using Faith:
+Now, we have left-cloned tree of left subtree in leftcloned and left-cloned tree of right subtree in rightcloned nodes.
+So, we need to do some work in POSTORDER in order to left-clone the entire tree rooted at node.
+
+First, we will create a duplicate node of the root node with the same value. 
+Since the inserted node should be sandwiched between the root node and the left subtree, 
+we will make the left child of this node as leftcloned, and update the root node's left child as this new node.
+      node.left = new Node(node.data, leftcloned, null)
+Since, the right subtree will not contain the duplicate node of root, hence we can directly update the root node's right as rightcloned.
+      node.right = rightcloned
+
+Time Complexity:O(n)
+We are traversing the entire tree and duplicating each node, hence the total time complexity is O(n) where n = number of nodes in the tree.
+
+Space Complexity:
+If we take the space taken by the duplicate nodes created, then the space complexity will be O(n).
+Also, the recursion stack space will take O(d) space where d = maximum depth of the binary tree.
+*/
+  public static Node createLeftCloneTree(Node node){
+      if(node == null){
+          return null;
+      }
+      Node leftCloneRoot = createLeftCloneTree(node.left);
+      Node rightCloneRoot = createLeftCloneTree(node.right);
+      
+      Node newNode = new Node(node.data, leftCloneRoot, null);
+      node.left = newNode;
+      node.right = rightCloneRoot;
+      
+      return node;
+  }
+
+//Transform To Normal From Left-cloned Tree
+/*
+The function is expected to convert a left-cloned tree back to it's original form. The left cloned tree is dicussed in previous question. 
+In a left-clone tree a new node for every node equal in value to it is inserted between itself and it's left child
+
+Try to think and do reverse engineering, so that you can get back the normal binary tree. 
+We need to delete all the duplicate nodes that are present in the left-cloned binary tree.
+
+So, let us try to find the recursive solution using the low-level thinking of defining expectations, faith and meeting expectation with faith.
+Expectation: We expect that the entire left-cloned binary tree rooted at the node will transform back to a normal binary tree.
+      transBackFromLeftClonedTree (node)
+Faith: We will keep on the smaller subproblems, 
+      i.e. we will have complete belief that the left-cloned left subtree 
+      and the right-cloned right subtree know how to transform back to a normal binary tree.
+But, there is a slight twist here. What should be the left child of the current node. Should we take left as node.left?
+No, since the direct left child of the root node is it's duplicate node only, hence the left subtree is not node.left but node.left.left.
+Try to think about it for a minute, why node.left.left will give us back the original left child 
+and how we will be able to get rid of the duplicate node easily.
+      node.left = transBackFromLeftClonedTree (node.left.left)
+      node.right = transBackFromLeftClonedTree (node.right)
+Meeting Expectation with Faith: We needed to delete the duplicate node of the current root, which is present as the direct left child.
+By updating node's left as normal tree of node.left.left, we have automatically deleted the duplicate node of the root.
+Why? It is because Java has an automatic garbage collection mechanism, so we need not worry about the deallocation of memory.
+Thus, we can simply return the root node: return node
+
+Time Complexity:O(n)
+We are traversing only n/2 nodes (skipping the duplicate nodes), hence total time complexity will be O(n/2) = O(n).
+
+Space Complexity:
+We are not taking any extra space, in fact we are freeing up some space by deleting duplicate nodes. Hence, the solution takes O(1) auxiliary space.
+Although, there is still recursion call stack space of O(d) where d = maximum depth of the tree.
+*/
+  public static Node transBackFromLeftClonedTree(Node node){
+      if(node == null){
+          return node;
+      }
+      Node leftNormalNode = transBackFromLeftClonedTree(node.left.left);
+      Node rightNormalNode = transBackFromLeftClonedTree(node.right);
+      
+      node.left = leftNormalNode;
+      node.right = rightNormalNode;
+      
+      return node;
+  }
+
 
 
