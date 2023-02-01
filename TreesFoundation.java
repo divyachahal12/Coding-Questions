@@ -1865,7 +1865,56 @@ The space complexity for the function is proportional to the height of the recur
       return ans.dia;
   }
 
+//Tilt Of Binary Tree
+/*
+ The function is expected to set the value of data member "tilt". 
+ "tilt" of a node is the absolute value of difference between sum of nodes in it's left subtree and right subtree. 
+ "tilt" of the whole tree is represented as the sum of "tilt"s of all it's nodes.
+ 
+To calculate total tilt of the binary tree, we travel the tree using postorder:
+
+First of all, at a particular node, we calculate the sum of all nodes of it's left subtree.
+Then we calculate the sum of all nodes of it's right subtree.
+Then we calculate the total sum, which is the sum of that node value plus the above calculated sums.
+After that, we calculate the tilt at the current node, which is the modulus of difference of sum of all nodes of left subtree
+      and sum of all nodes of right subtree.
+And simultaneously we will keep the track of total tilt so far and keep updating it.
+Not to forget about the base case, since we will be returning the total sum of each node. 
+      So the base case hits when the node becomes null, when the leaf node makes further calls.
+So, we return 0 as the total sum of null nodes.
+
+Time Complexity:O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity:O(n)
+The space complexity for the function is proportional to the height of the recursion stack which can be O(n) at max.
+*/
+  static int tilt = 0;
+  public static int tilt(Node node){
+      if(node == null){
+          return 0;
+      }
+      int ls = tilt(node.left);
+      int rs = tilt(node.right);
+      
+      int ltilt = Math.abs(ls - rs);
+      tilt += ltilt;
+      int ts = ls + rs + node.data;
+      return ts;
+  }
+
 //
+
+
+
+
+
+
+
+
+
+
+
 
 
 
