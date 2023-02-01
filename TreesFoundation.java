@@ -1903,10 +1903,78 @@ The space complexity for the function is proportional to the height of the recur
       return ts;
   }
 
+//Is A Binary Search Tree
+/*
+You are required to check if the tree is a Binary Search Tree (BST) as well. 
+In a BST every node has a value greater than all nodes on it's left side and smaller value than all node on it's right side.
+
+Expectation: We expect that if we pass the root node to the isBST(node) function, 
+             we will get true if the tree is a BST and we will get false if it is not a BST.
+Faith: A tree is said to be a binary search tree if it is a binary search tree at its root. 
+       What does this mean? It means that the value inside the left child of the root node should be less than the value of the root node 
+       and the value inside the right child of the root node should be greater than the value inside the root node. 
+       This is not sufficient to make a tree a binary search tree. 
+       It will be a BST if its left subtree and right subtree both are Binary Search Trees too.
+
+So, we have a faith that when we call the function isBST(node) for the left child and right child of any node, 
+it will tell us whether the left/right sub-tree is a BST or not. 
+To keep it simple, we say that a binary tree is a BST as a node only when the data of the node is greater than its left child's data 
+and less than its right child's data. 
+But a binary tree is a BST as a tree when it is a BST as a node and its left and right subtrees are also BSTs. 
+There is one more thing that we would like to add in our faith. What is that? 
+We have faith that we will also get the minimum value and the maximum value in a sub-tree when we make a recursive call. 
+What do we need the minimum and maximum value in a sub-tree for?
+Let us say we want to find whether the above tree is a BST or not. 
+For that, we have already made recursive calls to the left subtree and the right subtree of the root node (50). 
+We know that the given tree will be a BST if the values in the left subtree are smaller than the value in the root node i.e. 50. 
+So, we find the maximum value in the left sub-tree. 
+If the root node value is greater than the max value in the left sub-tree then definitely it will be greater than all the values in the left sub-tree. 
+Similarly, the value in the root node should be less than the value in the right subtree. 
+So, if the value in the root node is less than the minimum value in the right subtree then definitely it will be less than all the values in the right subtree. 
+This is why we are finding the maximum and minimum value for every sub-tree in the recursive calls. 
+Still, we have something left. 
+Why are we finding the minimum value in the left subtree if we only have to compare the root node to the max value for the left sub-tree? 
+Similarly, why are we finding the max value in the right subtree if we are only using the min value? 
+So, the minimum value in the left subtree a
+nd the maximum value in the right subtree is calculated so that we can easily find the min/max value of the next node. 
+Conclusion: Our faith is that recursion will tell us whether the subtree of a tree is a BST or not 
+            and also give us the min and max values of that sub-tree.
+Relation: So, the relation should be clear by now. We will check whether a tree is a BST as a node (you already know what this means) 
+          and we will apply our faith in recursion to check whether the left subtree and right subtree are BST or not.
+
+Time Complexity:
+The time complexity for this solution is O(n) as we have visited every node in the binary tree to check whether its sub-tree is a BST or not.
+Space Complexity:
+The space complexity for the above code is O(1) as we have not used any extra data structure. 
+If we consider the recursion space then the space complexity will be O(log2n) because this is the max height of the stack at any time during the recursion.
+This is equal to the height of the tree.
+*/
+ static class BSTPair {
+     boolean isBST;
+     int min;
+     int max;
+ }
+ 
+ public static BSTPair checkBST(Node node){
+     if(node == null){
+         BSTPair bp = new BSTPair();
+         bp.isBST = true;
+         bp.min = Integer.MAX_VALUE;
+         bp.max = Integer.MIN_VALUE;
+         return bp;
+     }
+     BSTPair lp = checkBST(node.left);
+     BSTPair rp = checkBST(node.right);
+     //work in post order
+     BSTPair mp = new BSTPair();
+     mp.isBST = (lp.isBST == true) && (rp.isBST == true) && (node.data >= lp.max && node.data <= rp.min);
+     mp.min = Math.min(node.data, Math.min(lp.min, rp.min));
+     mp.max = Math.max(node.data, Math.max(lp.max, rp.max));
+     
+     return mp;
+ }
+
 //
-
-
-
 
 
 
