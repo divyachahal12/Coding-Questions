@@ -1974,10 +1974,61 @@ This is equal to the height of the tree.
      return mp;
  }
 
+//Is Balanced Tree
+/*
+A binary tree is balanced if for every node the gap between height's of it's left and right subtree is not more than 1.
+
+Expectation: We expect that when we pass root as the parameter to the isBalanced(node) function, 
+             it will return true if all the nodes of the tree are balanced and it will return false if even one node of the tree is not balanced.
+Faith: We have a faith that if we call this isBalanced(node) function for the left or right child of any node, 
+       it will return the height of the subtree and also whether the node is balanced or not.
+Relation: We will check whether all the nodes in the right subtree and the left subtree are balanced or not and also check the current node. 
+          If even one node is found imbalanced, return false else return true.
+
+Time Complexity: O(n)
+as we are visiting every node to check whether it is balanced or not.
+
+Space Complexity: O(h)
+The space complexity for the above code is O(1) as we have not used any extra data structure. 
+If we consider the recursion space then the space complexity will be O(log2n) because this is the max height of the stack at any time during the recursion.
+This is equal to the height of the tree.
+*/
+  public static boolean isBal = true;
+  public static int balTree(Node node){
+      if(node == null){
+          return 0;
+      }
+      int lh = balTree(node.left);
+      int rh = balTree(node.right);
+      int gap = Math.abs(lh - rh);
+      if(gap > 1){
+          isBal = false;
+      }
+      int th = Math.max(lh, rh) + 1;
+      return th;
+  }
+
+//using Pair Approach
+  public static class BalPair{
+      int ht;
+      boolean isBal;
+  }
+  public static BalPair balTree(Node node){
+      if(node == null){
+          BalPair bp = new BalPair();
+          bp.ht = 0;
+          bp.isBal = true;
+          return bp;
+      }
+      BalPair lp = balTree(node.left);
+      BalPair rp = balTree(node.right);
+      BalPair mp = new BalPair();
+      mp.ht = Math.max(lp.ht, rp.ht) + 1;
+      mp.isBal = Math.abs(lp.ht - rp.ht) <= 1 && lp.isBal && rp.isBal;
+      return mp;
+  }
+
 //
-
-
-
 
 
 
