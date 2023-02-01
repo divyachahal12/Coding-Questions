@@ -2028,8 +2028,67 @@ This is equal to the height of the tree.
       return mp;
   }
 
-//
+//Largest Bst Subtree
+/*
+You are required to find the root of the largest subtree which is a BST. Also, you have to find the number of nodes in that sub-tree.
+A tree is said to be a Binary Search Tree if all of its nodes fulfill the following conditions:
 
+It should be a Binary Tree, i.e. each node can have at most 2 children.
+The data of all the nodes to the left of any node should be lesser than the data of that node.
+The data of all the nodes to the right of any node should be greater than the data of that node.
+
+We add two more data properties in the bstpair class: "root" and "size" which denote the root of the largest BST subtree 
+and size of the largest BST subtree respectively.We already know how to calculate min and max through the "Is BST" question.
+1 is added to include the root node in the "size".
+
+Else if the node doesn't form a BST and the size of the left BST subtree of the node is greater than the size of the right BST subtree then,
+      the largest BST subtree is the left subtree and its size and root are assigned to "mp".
+Else the largest BST subtree is the right subtree and its size and root are assigned to "mp".
+
+TIME COMPLEXITY- O(n)
+The time complexity of the above solution is O(n) as we are visiting every node to check whether it is balanced or not.
+Space Complexity: O(h)
+if space required for recursion (call-stack) is not included.
+*/
+ static class BSTPair {
+     boolean isBST;
+     int min;
+     int max;
+     Node root;
+     int size;
+ }
+ 
+ public static BSTPair checkBST(Node node){
+     if(node == null){
+         BSTPair bp = new BSTPair();
+         bp.isBST = true;
+         bp.min = Integer.MAX_VALUE;
+         bp.max = Integer.MIN_VALUE;
+         bp.root = null;
+         bp.size = 0;
+         return bp;
+     }
+     BSTPair lp = checkBST(node.left);
+     BSTPair rp = checkBST(node.right);
+     //work in post order
+     BSTPair mp = new BSTPair();
+     mp.isBST = (lp.isBST == true) && (rp.isBST == true) && (node.data >= lp.max && node.data <= rp.min);
+     mp.min = Math.min(node.data, Math.min(lp.min, rp.min));
+     mp.max = Math.max(node.data, Math.max(lp.max, rp.max));
+     
+     if(mp.isBST){
+         mp.root = node;
+         mp.size = lp.size + rp.size + 1;
+     }else if(lp.size > rp.size){
+         mp.root = lp.root;
+         mp.size = lp.size;
+     }else{
+         mp.root = rp.root;
+         mp.size = rp.size;
+     }
+     
+     return mp;
+ }
 
 
 
