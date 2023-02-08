@@ -2090,6 +2090,138 @@ if space required for recursion (call-stack) is not included.
      return mp;
  }
 
+/*-----------------------BINARY SEARCH TREES--------------------------------*/
+/*
+A tree is said to be a Binary Search Tree if it fulfills the following conditions:
+
+It should be a Binary Tree, i.e. each node can have at most 2 children.
+The data of all the nodes to the left of any node should be lesser than the data of that node.
+The data of all the nodes to the right of any node should be greater than the data of that node.
+Reader, meditate on the fact that the above properties must be true for all the nodes.
+You should also notice that these 3 properties are true for all the leaf nodes of a tree because a leaf node has no children.
+
+time complexity of BST is O(log n).
+When we make the first comparison, we move toward one half of the subtree and discard the other half. Hence, the area to search gets reduced by half. 
+Again that half area is further halved on the second comparison and so on
+the time complexity is O (log n) when every subsequent element gets halved of its previous value.
+size and sum of both BST and Binary Tree have the same complexities because these functions are dependent on the structures of a tree 
+and the structures of BST and BT are the same.
+
+However, max, min and find functions depend upon the values of the nodes. Therefore, these functions are different for BST and BT.
+
+Hence, as previously discussed, the time complexity of BST for these functions is O(log n) and the time complexity of BT is O(n).
+*/
+
+//BST Constructor
+/*
+Time Complexity: O(n) where n is the number of nodes in a binary search tree
+
+Space Complexity: O(1)
+because array was given input to us and we will not consider its space and we have not used any extra space to create a tree.
+
+Algorithm:
+Calculate the mid of the given array ( mid=( low + high )/2 ). This will become the root node of the BST.
+We know that all the values in the array at the left side of the mid are smaller than the value at the mid and all the values at the right side of the mid are greater than the value at the mid. So, the values at the left of the mid will form the left subtree of the node and the values at its right will form the right subtree.
+We will call the createBST function recursively, to create the left and right subtrees of the root node and the further nodes. 
+*/
+public static Node construct(int[] arr, int lo, int hi){
+      if(lo > hi){
+            return null;
+      }
+      int mid = (lo + hi) / 2;
+      int data = arr[mid];
+      Node lc = construct(arr, lo, mid - 1);
+      Node rc = construct(arr, mid + 1, hi);
+      Node node = new Node(data, lc, rc);
+      return node;
+}
+
+//size, sum, max, min, find in BST
+  public static int size(Node node) {
+    if (node == null) {
+      return 0;
+    }
+    int ls = size(node.left);
+    int rs = size(node.right);
+    int ts = ls + rs + 1;
+    return ts;
+  }
+
+  public static int sum(Node node) {
+    if (node == null) {
+      return 0;
+    }
+    int ls = sum(node.left);
+    int rs = sum(node.right);
+    int ts = ls + rs + node.data;
+    return ts;
+  }
+
+  /*
+  To get the maximum valued node we need to check only for the right subtree as for BST the maximum value lies only on the right subtree. 
+  So we need to call for the right subtree whenever possible 
+  and when the right subtree is null we can conclude that our current node is the maximum valued node in the BST 
+  as if it is not the maximum valued node then it must have a right subtree which is not the case.
+  */
+  public static int max(Node node) {
+    if (node.right == null) {
+      return node.data;
+
+    } else {
+      return max(node.right);
+    }
+  }
+
+  public static int min(Node node) {
+    if (node.left == null) {
+      return node.data;
+
+    } else {
+      return min(node.left);
+    }
+  }
+  /*
+  Suppose if our current node data is less than the node data that is to be found 
+  then there is no point in checking for left subtree as the left subtree will contain nodes that will be less than the current node data 
+  hence we can directly check for the right subtree. Similarly, 
+  if our current node data is greater than the node data that is to be found then we need to call for the left subtree only. 
+  At any point of time if we get equal valued current node data then we return true, else if we reach a null node then we return false.
+  */
+  public static boolean find(Node node, int data) {
+    if (node == null) {
+      return false;
+    }
+    if (data > node.data) {
+      return find(node.right, data);
+    } else if (data < node.data) {
+      return find(node.left, data);
+    } else { //data == node.data
+      return true;
+    }
+  }
+/*
+Time Complexity: O(logn)
+The time complexity for the function is proportional to the height of the binary search tree as for every call we are neglecting one of the subtrees.
+The time complexity of O(n) for Size and Sum functions.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
