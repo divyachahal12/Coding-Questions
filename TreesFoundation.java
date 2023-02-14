@@ -2208,12 +2208,127 @@ Space Complexity: O(logn)
 The space complexity for the function is proportional to the height of the tree due to the recursion stack.
 */
 
+//Add Node To Bst
+/*
+The problem here deals with adding a node to the given input binary search tree.
+
+The node that is to be added is always added at the leaf as adding it in between would make us rearrange the structure of our binary search tree. 
+Hence in our algorithm, we need to reach the valid leaf where the node can be added satisfying the BST property.
+
+For that, if the current node is greater than the node to be added then we have to traverse only the left subtree. 
+Similarly, if the current node is lesser than the node to be added then we have to traverse only the right subtree. 
+We need to do these steps to the point when we reach the null node, as that would be the actual position for the insertion of our new node. 
+Now here we will create a new node and then return. 
+Now to add it to the tree we will be returning the node from the function and then storing it to the left pointer or the right pointer of the parent 
+      thus actually changing the BST.
+
+Why this approach works?
+
+Whenever we reject a subtree based on data comparison, 
+it is done as it is never possible to place our node in that region as it would dishonor the BST property. 
+Suppose we discard the right subtree so if we place our node in the right subtree then its value will be less than the root node 
+and having a value lower than the roots data in the right half is not a valid BST.
+Hence choosing at any level ensures an optimally valid subtree.
+
+Time Complexity: O(logn)
+The time complexity for the function is proportional to the height of the binary search tree as for every call we are neglecting one of the subtrees.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static Node add(Node node, int data) {
+      if(node == null){
+          return new Node(data, null, null);
+      }
+      if(data > node.data){
+          node.right = add(node.right, data);
+      }else if(data < node.data){
+          node.left = add(node.left, data);
+      }else{
+          //data = node.data
+          //do nothing
+      }
+      return node;
+  }
+
+//Remove Node From Bst ****IMP
+/*
+The problem here deals with removing a particular node from the given input binary search tree.
+
+There are three cases which are needed to be considered:
+
+1. With Zero Child - 
+   The node to be removed has no children. 
+   In this case, we need to set the leaf node as null.
+
+2. With One Child - 
+   In this case, the node can have only one child either the left child or the right child. 
+   Here the node needs to be replaced with its child.
+
+3. With Two Children - 
+   In this case, the node has both left child and right child. 
+   So here we need to remove the child keeping in mind to honor the BST property, 
+   for that we find the maximum of the left subtree and replace the current node with the left maximum node. 
+   This is done so that no element in BST will be greater than the node while as it is left maximum so all the elements will be lesser than 
+      the right subtree, hence it follows BST. 
+   Now we will remove the left maximum instead of the current node as we have used replacement.
+
+Why removing the left maximum element is feasible?
+
+Claim: Node with left maximum value will never have two children or in particular it will never have a right child.
+
+Proof: If a node in a BST has a right child then this indicates that the current node is smaller than the right child, 
+       but as our left maximum node is the maximum in the left half so if it has a right child then this node can never be the left maximum. 
+       Hence proved.
+
+The algorithm here implements the above-mentioned cases and uses a max() function to get the left maximum node from the subtree. 
+Also, we have to make our function returning the node so that we can save and update the structure of our BST. 
+Also, we are eradicating redundant searches by considering only one of the subtree where our node can be present.
+
+Time Complexity: O(logn)
+The time complexity for the function is proportional to the height of the binary search tree as for every call we are neglecting one of the subtrees.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static int max(Node node) {
+    if (node.right == null) {
+      return node.data;
+
+    } else {
+      return max(node.right);
+    }
+  }
+
+  public static Node remove(Node node, int data) {
+    if (node == null) {
+      return null;//no node found so return nothing
+    }
+
+    if (data > node.data) { //go to right side
+      node.right = remove(node.right, data);
+    } else if (data < node.data) { //go to left side
+      node.left = remove(node.left, data);
+    } else { //data = node.data, i.e. node to be removed found
+
+      //doing work
+      if (node.left != null && node.right != null) { //2 children
+        int lmax = max(node.left);
+        node.data = lmax;
+        node.left = remove(node.left, lmax);
+        return node;
+      } else if (node.left != null) { //1 child only, i.e. left child
+        return node.left;//return child node as result;
+      } else if (node.right != null) { //1 child only, i.e. right child
+        return node.right;
+      } else { //0 child
+        return null;
+      }
+    }
+    return node;
+  }
+
 //
-
-
-
-
-
 
 
 
