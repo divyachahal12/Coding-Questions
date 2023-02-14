@@ -2328,7 +2328,41 @@ The space complexity for the function is proportional to the height of the tree 
     return node;
   }
 
-//
+//Replace With Sum Of Larger
+/*
+The problem here deals with replacing the nodes value with all the nodes which are greater than the nodes data.
+
+The idea here is to use the property of BST. 
+As we know the inorder traversal of a BST gives increasingly sorted numbers 
+so if we traverse in reverse inorder then we would get numbers in decreasingly sorted order. 
+This implies that we will be visiting numbers starting from the maximum value.
+
+The tree can be traversed in reverse in order by firstly recursively calling for the right child then doing the work 
+and later on calling the left child recursively.
+
+As our problem deals with replacing with the sum of all larger numbers so while traversing in reverse order 
+we can make sure that we already have the sum of all numbers greater than the current node 
+then we can simply replace the nodes data with the sum and continue our traversal.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as tree traversal is involved which is linear in terms of time complexity.
+
+Space Complexity: O(logn)
+the space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  static int sum = 0;
+  public static void rwsol(Node node){
+      if(node == null){
+          return;
+      }
+      //reverse inorder traversal;
+      rwsol(node.right);
+      int od = node.data;
+      node.data = sum;
+      sum += od;
+      rwsol(node.left);
+      
+  }
 
 
 
