@@ -2364,8 +2364,44 @@ the space complexity for the function is proportional to the height of the tree 
       
   }
 
+//Lca Of Bst
+/*
+The problem here deals with finding the lowest common ancestor of the two given input nodes.
 
+One of the approaches is to find the node to root path for both the nodes and then check for the LCA, 
+this approach is already discussed in the Binary Tree section.
 
+Here we will try to use the property of BST to find the LCA. 
+By definition LCA is the node that is at the lowermost level and common to both, 
+this implies that they can have more than one common ancestor and we need to give the lowest common of them. 
+Also, the LCA will be the one from where one of the nodes will be in its left subtree and the other will be in the right subtree. 
+Hence LCA will be the node when the node has a value less than the current node and the other has a value greater than the current node 
+hence only then there will be a condition that our current node is the LCA and left subtree and right subtree have only one of the given nodes.
+
+In our approach here, we will be traversing all the ancestors from the root until we reach the LCA. 
+So we will be selecting subtrees based on whether our nodes lie in the left half or right half 
+until we reach the point when one node lies on the left and the other on right. 
+This will be the point where we will be considering this node as our LCA.
+
+Time Complexity: O(logn)
+The time complexity for the function is proportional to the height of the binary search tree as for every call we are neglecting one of the subtrees.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+
+*/
+  public static int lca(Node node, int d1, int d2) {
+      if(d1 < node.data && d2 < node.data){
+          return lca(node.left, d1, d2);
+      }else if(d1 > node.data && d2 > node.data){
+          return lca(node.right, d1, d2);
+      }else{//d1 < node.data && d2 > node.data. 
+          //there cant be the case of d1 > data && d2 < data because d2 is already greater than d1, so if d1 > data then d2 has to be  > data
+          return node.data;
+      }
+  }
+
+//
 
 
 
