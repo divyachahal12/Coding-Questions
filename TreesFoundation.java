@@ -2401,12 +2401,211 @@ The space complexity for the function is proportional to the height of the tree 
       }
   }
 
-//
+//Print In Range
+/*
+The problem here deals with print all the nodes in ascending sorted order in the range from d1 to d2.
 
+First of all, we must get to our conclusion that the required result should be in ascendingly sorted order 
+henceforth we shall apply inorder in some way here. 
+As we are using a BST then we can discard subtrees also by checking whether our range lies in left subtree or right subtree. 
+If our range can lie in both the subtrees then we shall consider both the subtrees by applying the inorder traversal 
+as it would ensure the relative sorting of elements.
 
+To summarize we are simply applying inorder traversal in this problem and for every subtree, 
+we are keeping a check to avoid visiting redundant subtrees that are out of range to make our code more efficient.
 
+Time Complexity: O(logn)
+The time complexity for the function is proportional to the height of the binary search tree as for every call we are neglecting one of the subtrees.
 
+Space Complexity: O(logn)
+the space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static void pir(Node node, int d1, int d2) {
+      if(node == null){
+          return;
+      }
+      
+      if(d1 < node.data && d2 < node.data){
+          pir(node.left, d1, d2);
+      }else if(d1 > node.data && d2 > node.data){
+          pir(node.right, d1, d2);
+      }else{//d1 <= node.data <= d2, i.e. in b/w both means in range
+          pir(node.left, d1, d2);
+          System.out.println(node.data);
+          pir(node.right, d1, d2);
+      }
+  }
 
+// increasing order in bst -> INORDER(SORTED)
+
+//Target Sum Pair In Bst
+/*
+The problem here deals with finding all the pairs which sum up to the target. Also, we have to ensure that we remove any duplicacy.
+
+To solve this problem we make use of our find() function which checks whether a particular element is present in the tree or not.
+
+Now we can simply perform any traversal, say inorder traversal, 
+then for every node we can find whether target - node.data is present in the tree or not. 
+If true, then we can print the node else we go to the next element. 
+Now to eradicate duplicacy we can put a simple if statement which deals with placing always the smaller valued node on the left side of the pair.
+
+The time complexity for this approach is O(nlogn)
+where n is the time to traverse the tree and logn for calling find() function for every node.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static boolean find(Node node, int data){
+      if(node == null){
+          return false;
+      }
+      if(data < node.data){
+          return find(node.left, data);
+      }else if(data > node.data){
+          return find(node.right, data);
+      }else{
+          return true;
+      }
+  }
+  //for using find(), we need to keep root as separate node as parameter, so to find in full given tree, as comp can lie in other branch of tree also
+  public static void travelAndPrint(Node root, Node node, int tar){
+      if(node == null){
+          return;
+      }
+      
+      travelAndPrint(root, node.left, tar);
+      int comp = tar - node.data;//comp = complement
+      if(node.data < comp){
+          if(find(root, comp) == true){
+              System.out.println(node.data + " " + comp);
+          }
+      }
+      travelAndPrint(root, node.right, tar);
+  }
+
+/*
+This can be optimized by converting the tree to a sorted array by inorder traversal and then later applying a two pointer approach to find all the pairs. 
+This will reduce our time complexity to O(n) but it will increase our space complexity by O(n) as we will be creating an additional array.
+*/
+  public static void travelAndFill(Node node, ArrayList<Integer> list){
+      if(node == null){
+          return;
+      }
+      //fill in INORDER for a SORTED list
+      travelAndFill(node.left, list);
+      list.add(node.data);
+      travelAndFill(node.right, list);
+  }
+  public static void travelSumPair(Node node, int tar, ArrayList<Integer> list){
+      if(node == null){
+          return;
+      }
+      travelAndFill(node, list);
+      int li = 0;
+      int ri = list.size() - 1;
+      while(li < ri){
+          int left = list.get(li);
+          int right = list.get(ri);
+          
+          if((left + right) < tar){
+              li++;
+          }else if(left + right > tar){
+              ri--;
+          }else{//left + right == tar
+              System.out.println(left + " " + right);
+              li++;
+              ri--;
+          }
+      }
+  }
+
+/*
+Now we wish to implement this two-pointer approach without making use of an additional array so that we can make use of iterative traversals on the tree. 
+As we know that inorder traversal gives increasingly sorted order 
+so if we do a reverse inorder traversal then we would get decreasingly sorted order 
+which was the condition we wished to implement using an additional array. 
+As soon as we achieved this we now need to apply our two-pointer approach 
+wherein we would keep one pointer at the beginning and one at the end and keep the pointers moving until the left pointer and right pointer coincide.
+
+Time Complexity: O(n)
+The time complexity for the function is linear.
+
+Space Complexity: O(logn)
+The space complexity for the function is proportional to the height of the tree due to the recursion stack.
+*/
+  public static class Pair {
+    Node node;
+    int state;
+
+    Pair(Node node, int state) {
+      this.node = node;
+      this.state = state;
+    }
+  }
+//gives value of left index node
+private static Node inorder(Stack stack) {
+  while (stack.size() > 0) {
+    Pair top = stack.peek();
+
+    if (top.state == 1) {
+      if (top.node.left != null) {
+        stack.push(new Pair(top.node.left, 1));
+      }
+      top.state++;
+    } else if (top.state == 2) {
+      if (top.node.right != null) {
+        stack.push(new Pair(top.node.right, 1));
+      }
+      top.state++;
+      return top.node;
+    } else {
+      stack.pop();
+    }
+  }
+  return null;
+}
+//gives value of right index node
+private static Node revInorder(Stack stack) {
+  while (stack.size() > 0) {
+    Pair top = stack.peek();
+    if (top.state == 1) {
+      if (top.node.right != null) {
+        stack.push(new Pair(top.node.right, 1));
+      }
+      top.state++;
+    } else if (top.state == 2) {
+      if (top.node.left != null) {
+        stack.push(new Pair(top.node.left, 1));
+      }
+      top.state++;
+      return top.node;
+    } else {
+      stack.pop();
+    }
+  }
+  return null;
+}
+
+private static void tspUtil(Node root, int target) {
+  Stack startStack = new Stack();
+  Stack endStack = new Stack();
+  startStack.push(new Pair(root, 1));
+  endStack.push(new Pair(root, 1));
+  Node startNode = inorder(startStack);
+  Node endNode = revInorder(endStack);
+  while (startNode.data < endNode.data) {
+    if (startNode.data + endNode.data == target) {
+      System.out.println(startNode.data + " " + endNode.data);
+      startNode = inorder(startStack);
+      endNode = revInorder(endStack);
+    } else if (startNode.data + endNode.data < target) {
+      startNode = inorder(startStack);
+    } else {
+      endNode = revInorder(endStack);
+    }
+  }
+  return;
+}
 
 
 
