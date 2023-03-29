@@ -82,4 +82,43 @@ It will be the height of the recursion stack, which can be O(V) at max.
         return false;
     }
 
-//
+//print all paths
+/*
+You are given a graph, a source vertex and a destination vertex.
+You are required to find and print all paths between source and destination. Print 
+     them in lexicographical order.
+    
+    E.g. Check the following paths
+             012546
+             01256
+             032546
+             03256
+
+    The lexicographically smaller path is printed first.
+    
+In the hasPath() function, the return type is Boolean, which basically indicates whether there exists a path between source and destination.
+But in this problem, instead of checking and returning some Boolean value we need to print the existing path.
+And to achieve this, the first change that we make in printAllPaths() function is that we change the return type of this function to void.
+And in addition, we add String in the argument of the function which will store the path covered so far.
+Changing this return type to void also implies that printAllPaths() function returns nothing 
+   therefore it makes no sense to capture the result of its recursive calls. (Statement - 5 in above code).
+Which also implies the invalidation of statements 6 and 7 from above code for printAllPaths() function.
+Moving to the most important point; even after doing the above changes, we may get a path or few printed but what about all possible paths.
+To take care of this, it is really important that we explore all possibilities.
+In the hasPath() function we used to set the corresponding value to src in the visited array as true, so that we can stop the redundant calls.
+But now, to print all paths, we need to allow even the once visited vertex to contribute to other possible paths. 
+For this, it's important to set the value, corresponding to src, in the visited array as false, after we explore all possibilities through the src vertex.
+*/
+public static void printAllPaths(ArrayList<Edge>[] graph, int src, int dest, boolean[] visited, String psf){
+       if(src == dest){
+           System.out.println(psf);
+           return;
+       }
+       visited[src] = true;
+       for(Edge edge: graph[src]){
+           if(visited[edge.nbr] == false){
+               printAllPaths(graph, edge.nbr, dest, visited, psf + edge.nbr);
+           }
+       }
+       visited[src] = false;
+   }
