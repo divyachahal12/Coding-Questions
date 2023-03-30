@@ -236,4 +236,22 @@ Kth LARGEST -> PRIORITY QUEUE(MIN) ALWAYS!
       }
    }
 
-//
+//Get Connected Components Of A Graph
+/*
+You are required to find and print all connected components of the graph.
+
+We will apply DFS for every unvisited vertex of the graph.
+While we encounter any vertex that has not already been visited, we will mark it visited and add it to the ArrayList.
+Once we complete the traversal of one component, we will add that component's arraylist to our answer ArrayList of ArrayList.
+
+Time Complexity:
+The time complexity of the above code is O(V) as we are going to visit every vertex exactly once.
+Space Complexity:
+The space complexity of the above code is O(h) where h is the height of the recursion stack.
+*/
+
+
+
+
+
+
