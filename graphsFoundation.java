@@ -122,3 +122,118 @@ public static void printAllPaths(ArrayList<Edge>[] graph, int src, int dest, boo
        }
        visited[src] = false;
    }
+
+//Multisolver - Smallest, Longest, Ceil, Floor, Kthlargest Path
+/*
+1. You are given a graph, a src vertex and a destination vertex.
+2. You are give a number named "criteria" and a number "k".
+3. You are required to find and print the values of 
+3.1 Smallest path and it's weight separated by an "@"
+3.2 Largest path and it's weight separated by an "@"
+3.3 Just Larger path (than criteria in terms of weight) and it's weight separated by an "@"
+3.4 Just smaller path (than criteria in terms of weight) and it's weight separated by an "@"
+3.5 Kth largest path and it's weight separated by an "@"
+
+Shortest path:
+When src and destination vertices are equal, 
+   if the weight so far (wsf) is less than the smallest path weight (spathwt) then the value of spathwt gets updated to the value of wsf. 
+   Hence, our smallest path (spath) is the path so far (psf).
+
+
+Largest path:
+When src and destination vertices are equal, 
+if the weight so far (wsf) is greater than the largest path weight (lpathwt) then the value of lpathwt gets updated to value of wsf. 
+Hence, our largest path (spath) is now the path so far (psf).
+
+Ceil path:
+To find the ceil path, we need to find the smallest weight out of all the weights larger than the criteria. 
+To do so, we first need to check if the weight so far (wsf) is greater than the given criteria. 
+Also, wsf needs to be smaller than the current ceil path weight. 
+If these conditions are fulfilled, then cpathwt is updated to this wsf and cpath becomes the path so far (psf).
+
+Floor path:
+To find the floor path, we need to find the largest weight out of all the weights smaller than the criteria. 
+To do so, we first need to check if the weight so far (wsf) is smaller than the given criteria. 
+Also, wsf needs to be larger than the current floor path weight. 
+If these conditions are fulfilled, then fpathwt is updated to this wsf and fpath becomes the path so far (psf).
+
+Kth largest path:
+To find the kth largest path we make use of Priority Queue.
+In a Priority Queue, the numbers can be added in any order but those numbers which have the highest priority are removed from first.
+By default, priority queue is a minimum priority queue i.e. the minimum number out of all the elements in the queue will be removed first.
+In our problem, if k=3, then the priority queue must always have 3 elements in it.
+So, when we keep removing the minimum number from the priority queue while traversing through all the elements, 
+at last the priority queue will store the 3 largest elements in it. 
+At this point, the element that will be removed will be the smallest of the 3 largest elements, 
+hence it is the 3rd largest number out of all the elements.
+
+Kth LARGEST -> PRIORITY QUEUE(MIN) ALWAYS!
+*/
+   static String spath;
+   static Integer spathwt = Integer.MAX_VALUE;
+   static String lpath;
+   static Integer lpathwt = Integer.MIN_VALUE;
+   static String cpath;
+   static Integer cpathwt = Integer.MAX_VALUE;
+   static String fpath;
+   static Integer fpathwt = Integer.MIN_VALUE;
+   static PriorityQueue<Pair> pq = new PriorityQueue<>();
+   public static void multisolver(ArrayList<Edge>[] graph, int src, int dest, boolean[] visited, int criteria, int k, String psf, int wsf) {
+      if(src == dest){
+          //smallest path
+          if(wsf < spathwt){
+              spathwt = wsf;
+              spath = psf;
+          }
+          //largest path
+          if(wsf > lpathwt){
+              lpathwt = wsf;
+              lpath = psf;
+          }
+          //just larger path a.k.a ceil
+          if(wsf > criteria && wsf < cpathwt){
+              cpathwt = wsf;
+              cpath = psf;
+          }
+          //just smaller path a.k.a. floor
+          if(wsf < criteria && wsf > fpathwt){
+              fpathwt = wsf;
+              fpath = psf;
+          }
+          //kth largest path
+          if(pq.size() < k){
+              pq.add(new Pair(wsf, psf));
+          }else{
+              if(wsf > pq.peek().wsf){
+                  pq.remove();
+                  pq.add(new Pair(wsf, psf));
+              }
+          }
+          return;
+      }
+      
+      visited[src] = true;
+      for(Edge e : graph[src]){
+          if(visited[e.src] == false){
+              multisolver(graph, e.nbr, dest, visited, criteria, k, psf + e.nbr, wsf + e.wt);
+          }
+          
+      }
+      return false;
+   }
+
+   static class Pair implements Comparable<Pair> {
+      int wsf;
+      String psf;
+
+      Pair(int wsf, String psf){
+         this.wsf = wsf;
+         this.psf = psf;
+      }
+
+      public int compareTo(Pair o){
+         return this.wsf - o.wsf;
+      }
+   }
+
+//
