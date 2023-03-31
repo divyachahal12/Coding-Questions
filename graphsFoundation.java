@@ -289,7 +289,52 @@ The space complexity of the above code is O(h) where h is the height of the recu
        }
    }
 
+//Is Graph Connected
+/*
+You are required to find and print if the graph is connected (there is a path from every vertex to every other).
+As discussed in the previous question, we find out the number of connected components of a graph. 
+If the number of components is 1, then the graph is said to be connected, else it is not connected.
+*/
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    int vtces = Integer.parseInt(br.readLine());
+    ArrayList<Edge>[] graph = new ArrayList[vtces];
+    for (int i = 0; i < vtces; i++) {
+      graph[i] = new ArrayList<>();
+    }
+
+    int edges = Integer.parseInt(br.readLine());
+    for (int i = 0; i < edges; i++) {
+      String[] parts = br.readLine().split(" ");
+      int v1 = Integer.parseInt(parts[0]);
+      int v2 = Integer.parseInt(parts[1]);
+      int wt = Integer.parseInt(parts[2]);
+      graph[v1].add(new Edge(v1, v2, wt));
+      graph[v2].add(new Edge(v2, v1, wt));
+    }
+
+    ArrayList<ArrayList<Integer>> comps = new ArrayList<>();//comps -> components
+    boolean[] visited = new boolean[vtces];
+    for (int v = 0; v < vtces; v++) {
+      if (visited[v] == false) {
+        ArrayList<Integer> comp = new ArrayList<>(); //comp -> component
+        drawTreeAndGenerateComp(graph, v, comp, visited);
+        comps.add(comp);
+      }
+    }
+    System.out.println(comps.size() == 1);////check condition here
+  }
+
+  public static void drawTreeAndGenerateComp(ArrayList<Edge>[] graph, int src, ArrayList<Edge> comp, boolean[] visited) {
+    visited[src] = true;
+    comp.add(src);
+    for (Edge e : graph[src]) {
+      if (visited[e.nbr] == false) {
+        drawTreeAndGenerateComp(graph, e.nbr, comp, visited);
+      }
+    }
+  }
 
 
 
