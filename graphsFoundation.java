@@ -336,5 +336,175 @@ If the number of components is 1, then the graph is said to be connected, else i
     }
   }
 
+//Number Of Islands
+/*
+ You are given a 2d array where 0's represent land and 1's represent water. 
+     Assume every cell is linked to it's north, east, west and south cell.
+ You are required to find and count the number of islands.
+
+Since the input is not given to us in a typical graph representation, we assume every cell of the 2d array as a vertex. 
+We also assume that every cell is connected to its north, east, west and south cell.
+Hence, each of these connections is considered an edge.
+
+We create a new Boolean 2d array "visited" which stores whether a cell has been visited or not. 
+Initially all the cells of this array are marked "false". 
+We also initialize a "count" variable which stores the number of islands in the graph with 0.
+For every cell of the input array, we check if that cell represents "land" and it hasn't been visited before. 
+If the cell fulfills both these conditions, then we call the drawTreeforComponent() function on it and increase the "count" by 1.
+The total "count" of islands in the graph is printed at the end of the main function.
+BASE CASE: In the drawTreeforComponent() function, 
+if we traverse out of the input grid (i.e. row<0 or column<0 or 
+row>=arr.length or column>=arr[0].length)
+or if we reach the "water" cell (arr[i][j]==1)
+or if we have already visited that cell earlier (visited[i][j]==true),
+then we simply return from the function.
+Before visiting a cell, we mark it as "true" so that we don't visit it again.
+We check whether cells to the north, east, west and south 
+   to the given cell depict the required island or not by recursively calling drawTreeforComponent() function on them.
+
+Dear reader, in this code, we made an intelligent base case for the drawTreeforComponent() function and made "reactive" recursion calls. 
+This means we simply make the recursion calls and if faced by any obstacle, the base case deals with it.
+
+Time Complexity:O(4*n2)
+O(4*n2) which is simply written as O(n2)
+This is because each cell of the matrix is processed at most 4 times. For Example, a particular cell can call a cell to its north, east, west or south.
+
+Space Complexity:O(n2)
+Since a 2D array is used to store "visited" elements hence the space complexity is quadratic.
+*/
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int m = Integer.parseInt(br.readLine());
+      int n = Integer.parseInt(br.readLine());
+      int[][] arr = new int[m][n];
+
+      for (int i = 0; i < arr.length; i++) {
+         String parts = br.readLine();
+         for (int j = 0; j < arr[0].length; j++) {
+            arr[i][j] = Integer.parseInt(parts.split(" ")[j]);
+         }
+      }
+
+      // write your code here
+      boolean[][] visited = new boolean[arr.length][arr[0].length];
+      int count = 0;
+      //traversing each cell in 2d array/matrix
+      for(int i = 0; i < arr.length; i++){
+          for(int j = 0; j < arr[0].length; j++){
+              if(arr[i][j] == 0 && visited[i][j] == false){
+                  drawTreeForComponent(arr, i, j, visited);
+                  count++; 
+              }
+          }
+      }
+      System.out.println(count);
+   }
+   public static void drawTreeForComponent(int[][] arr, int i, int j; boolean[][] visited){
+       if(i < 0 || j < 0 || i >= arr.length || j >= arr[0].length 
+          || visited[i][j] == true || arr[i][j] == 1){
+           return;
+       }
+       visited[i][j] = true;
+       drawTreeForComponent(arr, i-1, j, visited);
+       drawTreeForComponent(arr, i, j+1, visited);
+       drawTreeForComponent(arr, i, j-1, visited);
+       drawTreeForComponent(arr, i+1, j, visited);
+   }
+
+//Perfect Friends
+/*
+In this problem you are given a number n (representing the number of students). Each student will have an id from 0 to n - 1.
+You are also given a number k (representing the number of pairs of students, clubbed together).
+In the next k lines, two numbers are given separated by a space. The numbers are ids of students belonging to the same club.
+You have to find in how many ways can we select a pair of students such that both students are from different clubs.
+
+We start with making a graph. For making a graph, we need to define the edge.
+In previous lectures of Graphs, we used to have 3 data members for edge, 
+but here we can drop the idea of weight as the data member because it's not required.
+So, in the new edge, we will only keep vertices and neighbors. And then define a constructor for this edge class.
+After this in main, n, which represents the number of students, also represents the number of vertices in the graph.
+We define an "n" length Array List of arrays (of type edge) and name it graph.
+Then we apply a for loop on the graph's length to put an array list at each of it's index.
+K, which represents the number of pairs, also represents the number of edges in the graph.
+So, to set these edges in the graph, we need to run a for loop k times.
+And in each iteration we collect and interpret the input from each line, which represents the pairs of students in the same club.
+To do so we define an array of strings, parts and using the readline function of buffer reader, we split the line when we find a space.
+Then we collect both the number representing vertices and which are now stored in the array parts, in some variables say v1 and v2.
+Then finally we add the edges at v1 and v2 indices of the graph.
+After that we use the same logic that we discussed in Get Connected Components (GCC).
+After applying gcc logic we will get the connected components of the graph stored in an array list of arraylists, comps.
+Each connected component represents each club. It means comps store all clubs and their members.
+Now to get our final answer, we need to do some simple math in main.
+Initialize a variable count to 0. 
+Then we run a for loop on the array list storing connected components initializing i=0. And a nested for loop, initializing j with i+1.
+In each iteration, we update count with the product of, sizes of clubs stored at index i and j.
+Sizes of clubs are basically size of arraylist at ith index in components and size of arraylist at jth index in components.
+
+Time Complexity:O(V+E)
+Because the DFS approach has been used.
+*/
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int n = Integer.parseInt(br.readLine());//n = no of vtces
+      int k = Integer.parseInt(br.readLine());//k = no of edges
+      
+      // write your code here
+      //making graph
+      ArrayList<Edge>[] graph = new ArrayList[n];
+      for(int i = 0; i < n; i++){
+          graph[i] = new ArrayList<Edge>;
+      }
+      //adding elements in graph
+      for(int e = 0; e < k; e++){
+          String line = br.readLine();
+          String[] parts = line.split(" ");
+          
+          int v1 = Integer.parseInt(parts[0]);
+          int v2 = Integer.parseInt(parts[1]);
+          
+          graph[v1].add(new Edge(v1, v2));
+          graph[v2].add(new Edge(v2, v1));
+      }
+      //getting connected components list
+      boolean[] visited = new boolean[n];
+      ArrayList<ArrayList<Integer>> comps = new ArrayList<>();
+      for(int v = 0; v < n; v++){
+          if(visited[v] == false){
+              ArrayList<Integer> comp = new ArrayList<>();
+              getConnectedComp(graph, v, comp, visited);
+              comps.add(comp);
+          }
+      }
+      //calculating no. of pairs
+      int pairs = 0;
+      for(int i = 0; i < comps.size(); i++){
+          for(int j = i + 1; j < comps.size(); j++){
+              int count = comps.get(i).size() * comps.get(j).size();
+              pair += count;
+          }
+      }
+      System.out.println(pair);
+   }
+   public static void getConnectedComp(ArrayList<Edge>[] graph, int src, ArrayList<Integer> comp, boolean[] visited){
+       visited[src] = true;
+       comp.add(src);
+       
+       for(Edge e : graph[src]){
+           if(e.nbr == false){
+               getConnectedComp(graph, e.nbr, comp, visited);
+           }
+       }
+   }
+
+
+//
+/*
+
+*/
+
+
+
 
 
