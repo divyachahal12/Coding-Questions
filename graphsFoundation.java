@@ -499,10 +499,80 @@ Because the DFS approach has been used.
    }
 
 
-//
+//Hamiltonian Path And Cycle
 /*
+1. You are given a graph and a src vertex.
+2. You are required to find and print all hamiltonian paths and cycles starting from src. The cycles must end with "*" and paths with a "."
 
+Note -> A hamiltonian path is such which visits all vertices without visiting any twice.
+        A hamiltonian path becomes a cycle if there is an edge between first and last vertex.
+Note -> Print in lexicographically increasing order.
+
+In Print All Paths, we used to find the path between a given source and destination vertex. 
+Each time we visited any vertex, we used to set the value corresponding to the vertex as true in the visited array.
+And when we were done exploring all neighbor's of this vertex then we again set the value as false corresponding to this vertex in the visited array.
+Also if the base case was hit, that is when source becomes equal to destination, we printed the path so far.
+We will follow a similar approach in this problem as well.
+But this time the base case will change.
+Since we need to visit each vertex of the graph this time, the base case will become the stage where all vertices have been visited.
+Also, also, also, we need to check that the path obtained is Hamiltonian Path or Hamiltonian Cycle.
+For doing so, we check whether there is an edge between source and last visited vertex.
+If there is edge than it is Hamiltonian Cycle and we print, "*". And if there is no edge then it is the Hamiltonian Path and we print, ".".
+
+Time Complexity:O(V+E)
+Because of the DFS approach.
 */
+public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int vtces = Integer.parseInt(br.readLine());
+      ArrayList<Edge>[] graph = new ArrayList[vtces];
+      for (int i = 0; i < vtces; i++) {
+         graph[i] = new ArrayList<>();
+      }
+
+      int edges = Integer.parseInt(br.readLine());
+      for (int i = 0; i < edges; i++) {
+         String[] parts = br.readLine().split(" ");
+         int v1 = Integer.parseInt(parts[0]);
+         int v2 = Integer.parseInt(parts[1]);
+         int wt = Integer.parseInt(parts[2]);
+         graph[v1].add(new Edge(v1, v2, wt));
+         graph[v2].add(new Edge(v2, v1, wt));
+      }
+
+      int src = Integer.parseInt(br.readLine());
+
+      // write all your codes here
+      HashSet<Integer> visited = new HashSet<>();
+      pathAndCycle(graph, src, src + "", visited, src);
+      
+   }
+    public static void pathAndCycle(ArrayList<Edge>[] graph, int src, String psf, HashSet<Integer> visited, int osrc){
+        if(visited.size() == graph.length - 1){
+            System.out.print(psf);
+            boolean connected = false;
+            for(Edge e : graph[src]){
+                if(e.nbr == osrc){
+                    connected = true;
+                    break;
+                }
+            }
+            if(connected == true){
+                System.out.println("*");
+            }else{
+                System.out.println(".");
+            }
+            return;
+        }
+        visited.add(src);
+        for(Edge e : graph[src]){
+            if(visited.contains(e.nbr) == false){
+                pathAndCycle(graph, e.nbr, psf + e.nbr, visited, osrc);
+            }
+        }
+        visited.remove(src);
+    }
 
 
 
