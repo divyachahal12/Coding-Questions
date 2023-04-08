@@ -574,6 +574,90 @@ public static void main(String[] args) throws Exception {
         visited.remove(src);
     }
 
+//Knights Tour
+/*
+1. You are given a number n, the size of a chess board.
+2. You are given a row and a column, as a starting point for a knight piece.
+3. You are required to generate the all moves of a knight starting in (row, col) such that knight visits all cells of the board exactly once.
+4. Complete the body of printKnightsTour function - without changing signature - to calculate and 
+    print all configurations of the chess board representing the route of knight through the chess board. Use sample input and output to get more idea.
+
+Note -> When moving from (r, c) to the possible 8 options give first precedence to (r - 2, c + 1) and move in clockwise manner to explore other options.
+
+We will use the levels and options technique that we have used in many problems earlier as well.
+
+Since we are using the levels and options method, we have to decide what options we have at a particular level.
+A knight can move in 8 possible directions if those moves stay inside the chess board as shown in fig-1 and fig-2.
+We will apply the recursive calls at each of these levels and the further exploration will be carried out by recursion.
+We will also have to think about the base cases. 
+Obviously, when we move out of the chess board then we have to return from that particular recursive call. 
+Also, we have to return from the recursive call if we come across a box which has already been visited
+
+How many moves will be there? We have to visit every block of the chessboard of size nxn. So, there will be nxn moves. 
+So, when we reach nxn move, we will put the move value in the corresponding row and column (that we have been doing so far) 
+and then we will print the board.
+
+So, the base cases or the exceptional cases that we handled are:
+If we reach out of the chess board, return
+If we reach an already visited block, return
+If we are at the last move, put the move in the chessboard and display the board.
+
+Time Complexity:
+The time complexity of this solution is O(8n^2) since there are n2 cells and for each we have a maximum of 8 possible moves.
+Space Complexity:
+The space complexity is O(1) without considering the recursion space and it is O(h) if we consider the recursion space, 
+here h is the height of the stack (max height of the recursion stack).
+*/
+public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int r = sc.nextInt();
+        int c = sc.nextInt();
+        
+        int[][] chess = new int[n][n];
+        printKnightsTour(chess, r, c, 1);
+    }
+
+    public static void printKnightsTour(int[][] chess, int r, int c, int upcomingMove) {
+        if(r < 0 || c < 0 || r >= chess.length || c >= chess.length || chess[r][c] > 0){
+            return;
+        }else if(upcomingMove == chess.length * chess.length){
+            chess[r][c] = move;
+            displayBoard(chess);
+            chess[r][c] = 0;
+            return;
+        }
+        chess[r][c] = upcomingMove;
+        printKnightsTour(chess, r - 2, c + 1, upcomingMove + 1);
+        printKnightsTour(chess, r - 1, c + 2, upcomingMove + 1);
+        printKnightsTour(chess, r + 1, c + 2, upcomingMove + 1);
+        printKnightsTour(chess, r + 2, c + 1, upcomingMove + 1);
+        printKnightsTour(chess, r + 2, c - 1, upcomingMove + 1);
+        printKnightsTour(chess, r + 1, c - 2, upcomingMove + 1);
+        printKnightsTour(chess, r - 1, c - 2, upcomingMove + 1);
+        printKnightsTour(chess, r - 2, c - 1, upcomingMove + 1);
+        chess[r][c] = 0;
+    }
+
+    public static void displayBoard(int[][] chess){
+        for(int i = 0; i < chess.length; i++){
+            for(int j = 0; j < chess[0].length; j++){
+                System.out.print(chess[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+//
+/*
+REMOVE MARK WORK ADD
+*/
+
+
+
+
+
 
 
 
