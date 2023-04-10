@@ -649,11 +649,86 @@ public static void main(String[] args) throws Exception {
         System.out.println();
     }
 
-//
+//Breadth First Traversal
 /*
 REMOVE MARK WORK ADD
-*/
 
+1. You are given a graph, and a src vertex.
+2. You are required to do a breadth first traversal and print which vertex is reached via which path, 
+     starting from the src.
+
+ Which data structure we used to print the level-order of a generic tree and a binary tree? 
+ Yes, we used the queue data structure and we implemented the algorithm "remove-print-add".
+ Here we will perform the following steps: r m* w a*
+
+r --> remove w --> work
+
+m --> mark a --> add
+Now, the first step from r m* w a* i.e. remove will be carried out. 
+So, we will remove the element from the queue and we mark the vertex 2 with a star depicting that we have visited it.
+
+The next step is w i.e. work. What is the work that we have to do here? We have to print. 
+So, that is what we will do. Now, the last step is to add. 
+We have to add the neighbors of this vertex i.e. vertex 2 to the queue and we have to add only those vertices which are not marked. 
+The thing which we want to convey is that if we do not take care of the order in which we are inserting the vertices into the queue, 
+we will still get Breadth First Traversal of the tree, but it would be different.
+
+Time Complexity:
+The adding and removing of elements from the queue takes O(1) time. 
+Since we are traversing every vertex of the graph to print its breadth first traversal, the time taken will be O(n).
+
+Space Complexity:
+Since we have used a queue data structure, the space complexity of the above method is O(n)
+*/
+static class Pair{
+       int v;
+       String psf;
+       
+       Pair(int v, String psf){
+           this.v = v;
+           this.psf = psf;
+       }
+   }
+
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int vtces = Integer.parseInt(br.readLine());
+      ArrayList<Edge>[] graph = new ArrayList[vtces];
+      for (int i = 0; i < vtces; i++) {
+         graph[i] = new ArrayList<>();
+      }
+
+      int edges = Integer.parseInt(br.readLine());
+      for (int i = 0; i < edges; i++) {
+         String[] parts = br.readLine().split(" ");
+         int v1 = Integer.parseInt(parts[0]);
+         int v2 = Integer.parseInt(parts[1]);
+         graph[v1].add(new Edge(v1, v2));
+         graph[v2].add(new Edge(v2, v1));
+      }
+
+      int src = Integer.parseInt(br.readLine());
+
+      // write your code here  
+      boolean[] visited = new boolean[vtces];
+      ArrayDeque<Pair> queue = new ArrayDeque<>();
+      queue.add(new Pair(src, src + ""));
+      
+      while(queue.size() > 0){
+          Pair rem = queue.removeFirst();
+          if(visited[rem.v] == true){
+              continue;
+          }
+          visited[rem.v] = true;
+          System.out.println(rem.v + "@" + rem.psf);
+          for(Edge e : graph[rem.v]){
+              if(visited[e.nbr] == false){
+                  queue.add(new Pair(e.nbr, rem.psf + e.nbr));
+              }
+          }
+      }
+   }
 
 
 
