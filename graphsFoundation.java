@@ -815,6 +815,111 @@ Please note that we are not taking into account the space taken to build the adj
        return false;
    }
 
+//Is Graph Bipartite
+/*
+You are required to find and print if the graph is bipartite
+Note -> A graph is called bipartite if it is possible to split it's vertices in two sets of mutually exclusive and exhaustive vertices such that all edges are across sets.
+
+According to the definition, we need to distribute vertices into two subsets which are mutually exclusive:
+
+No vertex should appear in both the sets, or the intersection of sets should be empty.
+Also, they need to be exhaustive:
+
+Every vertex should appear in either one of the two sets, or the union of sets should be the entire set {0, 1, 2, ... n-1}.
+Let us first analyze WHAT we will have to do in the algorithm.
+
+If the graph is acyclic, i.e. there is no cycle present in the graph, then the graph is always bipartite.
+If there exists any one cycle of odd length, i.e. the number of vertices in the cycle are odd in counting, then the graph is not bipartite.
+If all the cycles (if present) are of even length, i.e. the number of vertices in each cycle are even in counting, then the graph is bipartite.
+The algorithm, which we are going to use to check bipartiteness of a graph is known as graph-coloring algorithm, which uses BFS traversals. 
+A graph is bipartite if and only if it is two-colorable.
+We will start a breadth-first traversal, starting from each vertex which hasn't been visited yet. 
+But, instead of just pushing the node's value into the queue, we will also push a visiting time of the node.
+We will try to add the nodes with even visiting time in the first set, and the nodes with odd visiting time in the second set.
+We know already that during the bfs traversal, if we find any node which is already visited, then there exists a cycle.
+If the length of cycle is even, then the visiting time of the last node will be the same from both the paths 
+   (if even from the first path, then it will be even from the second path as well, and vice-versa).
+Else, since the length of cycle is odd, the visiting time of the last node in the cycle will be different from both the paths 
+   (if even from the first path, then it will be odd from the second path, and vice-versa).
+Hence, we cannot put the last node in either the first set or the second set. Thus, the graph will not be bipartite in an odd-length cycle case.
+
+Time Complexity:
+We are simply doing a BFS traversal of the entire graph, which will take O(N + E) time, where N = number of vertices, and E = number of edges.
+Space Complexity:
+We are using a queue data structure for the BFS traversal, which will store at max N vertices. Hence, the space complexity is O(N).
+Please note that we are not taking into account the space taken to build the adjacency list, as it was given to us as an input.
+*/
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int vtces = Integer.parseInt(br.readLine());
+      ArrayList<Edge>[] graph = new ArrayList[vtces];
+      for (int i = 0; i < vtces; i++) {
+         graph[i] = new ArrayList<>();
+      }
+
+      int edges = Integer.parseInt(br.readLine());
+      for (int i = 0; i < edges; i++) {
+         String[] parts = br.readLine().split(" ");
+         int v1 = Integer.parseInt(parts[0]);
+         int v2 = Integer.parseInt(parts[1]);
+         int wt = Integer.parseInt(parts[2]);
+         graph[v1].add(new Edge(v1, v2, wt));
+         graph[v2].add(new Edge(v2, v1, wt));
+      }
+
+      // write your code here
+      int visited[] = new int[vtces];
+      Arrays.fill(visited, -1);
+      for(int v = 0; v < vtces; v++){
+          if(visited[v] == -1){//means not visited
+              boolean isComponentBipartite = isGraphBipartite(graph, v,  visited);
+              if(isComponentBipartite == false){
+                  System.out.println(false);
+                  return;
+              }
+          }
+      }
+      System.out.println(true);
+   }
+   static class Pair{
+       int v;
+       String psf;
+       int level;
+       Pair(int v, String psf, int level){
+           this.v = v;
+           this.psf = psf;
+           this.level = level;
+       }
+   }
+   public static boolean isGraphBipartite(ArrayList<Edge>[] graph, int src, int[] visited){
+       ArrayDeque<Pair> q = new ArrayDeque<>();//bfs uses queue
+       q.add(new Pair(src, src + "", 0));
+       
+       while(q.size() > 0){//traversing bfs using queue
+           Pair rem = q.removeFirst();
+           
+           if(visited[rem.v] != -1){//means already visited
+               if(rem.level != visited[rem.v]){//coming level not same as previous level; i.e. odd size of cycle, in which bipartite not possible
+                   return false;
+               }
+           }else{
+               visited[rem.v] = rem.level;
+           }
+           for(Edge e: graph[rem.v]){
+               if(visited[e.nbr] == -1){//nbr not visited
+                   q.add(new Pair(e.nbr, rem.psf + e.nbr, rem.level + 1));
+               }
+           }
+       }
+       return true;
+   }
+
+//
+/*
+
+*/
+
 
 
 
