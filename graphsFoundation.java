@@ -1003,13 +1003,106 @@ Please note that we are not taking into account the space taken to build the adj
        }
    }
 
+//Shortest Path In Weights Dijkstra's Algorithm
+/*
+The algorithm is very intuitive, as it follows a Greedy Approach. The algorithm is also known as "Single Source Shortest Paths Algorithm".
+
+You are given an undirected graph and a source vertex. The vertices represent cities and the edges represent distance in kms.
+The graph is weighted in nature. The weights of all edges are non-negative.
+You are required to find the shortest path to each city (in terms of kms) from the source city along with the total distance on the path from source to destinations.
+Note: Input is given in the form of adjacency list. 
+
+Please note that this problem is different from Single Source Source Shortest Path in terms of count of edges (in unweighted graph).
+For the shortest path in terms of edge count, we had used BFS traversal in the previous problem "Spread of Infection" .
+Here, we need to find the shortest path in terms of weight. The shortest path may (or may not) be longer in terms of edge count.
+In the above example, the shortest weighted path from 0 to 1 is equal to 10 via "02341", which is longer from the path "01".
+You will be amazed to read that, we just need a slight modification to our BFS algorithm, so that it can find the shortest path in terms of weight.
+Can you guess where we need to tweak?
+In BFS traversal, we used a queue data structure. But since we can only maintain FIFO order in the queue, we cannot get the shortest path in terms of weight.
+For Dijkstra's algorithm, we just need to replace the queue with a priority queue, and that's it.
+You should be able to analyze that the Priority Queue pops out the element with higher priority among all the candidates.
+We should have a path with the shortest distance as the highest priority. 
+Hence, we will declare a Pair class, which will have a weight so far, storing the maximum distance of that node from source vertex.
+But, how will our priority queue be able to decide which Pair object has higher priority?
+So, our Pair class must implement a comparable interface. 
+Please refer to the "Comparable vs Comparator" video of "Priority Queue" if you do not know how to define a custom comparator for user defined classes. 
+We will define the compareTo function which compares the values of weight so far (wsf).
+
+Time Complexity:
+This is an interesting analysis. The time complexity of Dijkstra's algorithm will be O(E + V logV) where V = number of vertices and E = number of edges.
+This is because, we are iterating over all the edges once during the entire run of the algorithm 
+In each iteration, we are popping one node and pushing the unvisited neighbour nodes. 
+Since the priority queue can contain all the vertices, the push or pop operation will be O(log V).
+Hence the total time complexity will be O(E) + O(V) * O(log V) = O(E + V log V).
+Note: You can argue that we might be having multiple Pairs having the same node's value. So, the maximum size of the priority queue will be not O(N) but O(E).
+But, even if you replace log V with Log E (cost of one push/pop operation), then there will be no difference in the time complexity as:
+
+O(E + VlogE) = O(E + Vlog(V^2)) = O(E + 2V logV) = O(E + V logV) only.
+Space Complexity:
+We are taking a priority queue of Pair nodes. Hence, the space complexity will be O(N) where N = maximum Pair nodes in the queue, which is equivalent to O(V).
+*/
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int vtces = Integer.parseInt(br.readLine());
+      ArrayList<Edge>[] graph = new ArrayList[vtces];
+      for (int i = 0; i < vtces; i++) {
+         graph[i] = new ArrayList<>();
+      }
+
+      int edges = Integer.parseInt(br.readLine());
+      for (int i = 0; i < edges; i++) {
+         String[] parts = br.readLine().split(" ");
+         int v1 = Integer.parseInt(parts[0]);
+         int v2 = Integer.parseInt(parts[1]);
+         int wt = Integer.parseInt(parts[2]);
+         graph[v1].add(new Edge(v1, v2, wt));
+         graph[v2].add(new Edge(v2, v1, wt));
+      }
+
+      int src = Integer.parseInt(br.readLine());
+      // write your code here
+      
+      PriorityQueue<Pair> pq = new PriorityQueue<>();
+      pq.add(new Pair(src, src + "", 0));
+      boolean[] vis = new boolean[vis];
+      
+      while(pq.size() > 0){
+          Pair rem = pq.remove();
+          
+          if(vis[rem.v] == true){//already visited
+              continue;
+          }
+          vis[rem.v] = true;
+          
+          System.out.pritln(rem.v + " via " + rem.psf + " @ " + rem.wsf);
+          
+          for(Edge e: graph[rem.v]){
+              if(vis[e.nbr] == false){//unvisited nbrs
+                  pq.add(new Pair(e.nbr, rem.psf + e.nbr, rem.wsf + e.wt));
+              }
+          }
+      }
+      
+   }
+   static class Pair implements Comparable<Pair>{
+       int v;
+       String psf;
+       int wsf;
+       Pair(int v, String psf, int wsf){
+           this.v = v;
+           this.psf = psf;
+           this.wsf = wsf;
+       }
+       public int compareTo(Pair o){
+           return this.wsf - o.wsf;
+       }
+   }
+
 //
 /*
 
 */
-
-
-
 
 
 
