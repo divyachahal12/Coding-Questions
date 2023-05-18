@@ -915,10 +915,101 @@ Please note that we are not taking into account the space taken to build the adj
        return true;
    }
 
+//Spread Of Infection
+/*
+Given an undirected graph representing people and their connectivity. 
+Vertices 0 to n-1 represent different people and edge (u, v) represents that there can be a direct contact between persons u and v.
+You are given a src person, who got infected by a disease at time t = 0.
+You are also given the total time t during which the infection can spread among the people.
+If a person is infected, then it takes 1 unit of time to make all of it's connections get infected.
+You need to find the count of people who can get infected by the disease within the time t.
+Note: Input is given in the form of adjacency list.
+
+The idea is to use a BFS traversal algorithm with the source node as the src.
+Along with the source node's value, we will also push the visiting time t = 0.
+We will maintain a count integer variable set to 0 initially, which will finally store the result, i.e. number of infected people within the total time of spread of infection.
+We will run the BFS, until the queue becomes empty (all nodes get visited), or the visiting time of the front element becomes greater than the total time given.
+If the node is already visited (cycle exists and the node was visited with a smaller visiting time), 
+   then we will simply pop and continue for the next element (do not visit it's neighbours).
+Otherwise, we will mark the current node as visited. 
+For each element, who's visiting time < total time, which gets removed (popped) from the queue, we will increment the count by 1.
+Also, we will break from the BFS traversal, if the front element's visiting time is greater than the total time of spread.
+Note: We can simply break because all the nodes after the front element present in the queue, 
+   will have visiting time greater than (or equal to) the visiting time of the front element. 
+   Since, the front element has time > t, hence all the elements after it will also have time > t.
+Now, we will push all the unvisited neighbours of the current node with visiting time one more than the visiting time of the current node. 
+   (If visiting time of src is x, then it's neighbours will have visiting time x + 1).
+Finally, when the BFS algorithm is successfully completed, we can simply print the value of count.
+
+Time Complexity:
+We are simply doing a BFS traversal, hence the time complexity will be O(N + E) where N = number of vertices in the graph and E = number of edges in the graph.
+Space Complexity:
+To perform BFS, we use queue data structure, which will take O(N) auxiliary space.
+Please note that we are not taking into account the space taken to build the adjacency list, as it was given to us as an input.
+*/
+    public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+      int vtces = Integer.parseInt(br.readLine());
+      ArrayList<Edge>[] graph = new ArrayList[vtces];
+      for (int i = 0; i < vtces; i++) {
+         graph[i] = new ArrayList<>();
+      }
+
+      int edges = Integer.parseInt(br.readLine());
+      for (int i = 0; i < edges; i++) {
+         String[] parts = br.readLine().split(" ");
+         int v1 = Integer.parseInt(parts[0]);
+         int v2 = Integer.parseInt(parts[1]);
+         graph[v1].add(new Edge(v1, v2));
+         graph[v2].add(new Edge(v2, v1));
+      }
+
+      int src = Integer.parseInt(br.readLine());
+      int t = Integer.parseInt(br.readLine());
+      
+      // write your code here
+      int[] vis = new int[vtces];
+      Arrays.fill(vis, 0);
+      ArrayDeque<Pair> q = new ArrayDeque<>();
+      q.add(new Pair(src, 1));
+      int count = 0;
+      
+      while(q.size() > 0){
+          Pair rem = q.removeFirst();
+          if(vis[rem.v] != 0){//already vis;
+              continue;
+          }
+          vis[rem.v] = rem.time;
+          if(rem.time > t){//time for current pair exceeds given 't' time, then break from loop
+              break;
+          }
+          count++;
+          for(Edge e, graph[rem.v]){
+              if(vis[e.nbr] == 0){//i.e. not visited nbr
+                  q.add(new Pair(e.nbr, rem.time + 1));
+              }
+          }
+      }
+      System.out.println(count);
+   }
+   static class Pair{
+       int v;
+       int time;
+       
+       Pair(int v, int time){
+           this.v = v;
+           this.time = time;
+       }
+   }
+
 //
 /*
 
 */
+
+
+
 
 
 
