@@ -48,11 +48,50 @@ When we pass arrays as a parameter to a function only shallow copy takes place.
 And if any changes occur inside the function then the changes will be reflected everywhere. 
 */
 
+//Span of Array
+/*
+1. You are given a number n, representing the count of elements.
+2. You are given n numbers.
+3. You are required to find the span of input. Span is defined as difference of maximum value and minimum value.
+*/
+ public static int span(int n, int[] a){
+     int min = a[0];
+     int max = a[0];
+     
+     for(int i = 0; i < n; i++){
+         if(a[i] < min){
+             min = a[i];
+         }
+         if(a[i] > max){
+             max = a[i];
+         }
+     }
+     int diff = max - min;
+     return diff;
+ }
+
+//Find Element In An Array
+/*
+1.You are given a number n, representing the size of array a.
+2.You are given n distinct numbers, representing elements of array a.
+3. You are given another number d.
+4. You are required to check if d number exists in the array a and at what index (0 based). If found print the index, otherwise print -1.
+*/
+ public static int findIdx(int n, int[] a, int d){
+     int res = -1;
+     for(int i = 0; i < n; i++){
+         if(a[i] == d){
+             res = i;
+             break;
+         }
+     }
+     return res;
+ }
+
 //
 /*
 
 */
-
 
 
 
