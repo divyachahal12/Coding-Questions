@@ -267,10 +267,48 @@ public static int[] diffOf2Arr(int n1, int[] a1, int n2, int[] a2){
     return ans;
 }
 
+//Reverse An Array
+/*
+We are given an array and we have to write the method definition for the void type function reverse which takes in a single parameter, which is the array to be reversed.
+
+We reverse the array by assigning integer variables to point at the start and end of the array, 
+swapping the contents of the indices pointed by them, then incrementing and decrementing the start pointer and end pointer. 
+This process goes on till the start pointer does not exceed the end pointer, which is when we know, the given array has been reversed.
+*/
+  public static void reverse(int[] a){
+    int i = 0;
+    int j = a.length - 1;
+    while(i < a.length && j > 0 && i < j){
+        int temp = a[j];
+        a[j] = a[i];
+        a[i] = temp;
+        i++;
+        j--;
+        
+    }
+  }
+
+//or
+public static void reverse (int[]a){
+    for (int i = 0; i < a.length / 2; i++)
+    {
+      int temp = a[i];
+      a[i] = a[a.length - i - 1];
+      a[a.length - i - 1] = temp;
+    }
+}
+
 //
 /*
 
 */
+
+
+
+
+
+
+
 
 
 
