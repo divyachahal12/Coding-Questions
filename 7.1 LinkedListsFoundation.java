@@ -1,3 +1,37 @@
+/*
+ARRAYS
+
+Let's suppose we declare the following array:
+int[] arr = new int[10];
+Since 1 integer is 4 bytes, therefore, for 10 integers 40 bytes are needed.
+We have a stack and a heap present in the memory.
+Suppose the heap is filled at positions where there are green areas and in between those 20 bytes are free at places
+If we want to make an arr of 40 bytes then it won't be possible to do so because an array is continuous and continuous memory spaces are not available in this heap.
+Had the memory been continuos then we would have been able to construct our desired array since 40 bytes are available continuously in the heap here.
+For this situation the array is formed in those 40 bytes as shown in the figure below and the stack would have stored the address of the first element of arr , say 4k.
+
+Now, we'll see how the linked list is different from it.
+
+LINKED LISTS
+
+For a linked list, had the memory in the heap not been contiguous, then we would not have had any problem in forming it.
+As you can see in the above figure, the list is "linked" despite that the memory is not continuous. 
+Do you see those small squares with 2 compartments? They are called nodes.
+
+There are 2 parts in a node: Data and Address of the next node.
+You can see, each element stores the address of the next element. 
+For example, the first node at the address 4k stores the address of the next element at 5k, the node at 5k stores the address of its next element 6k and so on. 
+As there are no more elements after the last node , therefore the address part of it is left "null".
+Also the stack stores the address of the first element of the linked list i.e. 4k.
+Hence we conclude that a linked list is a non-continuous type of data structure. 
+This means that a Linked List utilizes space when there is a fragmented memory.
+
+Disadvantage of Linked List over Arrays in terms of memory :
+Even though it is advantageous to use Linked Lists for space conservation in heap, 
+we notice that since each node stores 2 values: data and address, therefore each node requires 4bytes+ 4 bytes=8 bytes of memory. 
+The memory used in arrays for each element was only 4 bytes. 
+Here, the space of linked lists is noticed to be more.
+*/
 public static class Node{
   int data;
   Node next;
@@ -10,6 +44,42 @@ public static class LinkedList{
 }
 
 //Add Last In Linked List
+/*
+The problem deals with adding a node to the end of a linked list. 
+For this problem, we are already given a class with head, tail, and size as data members and we wish to add a node at the end. 
+The other way to see this problem is that we need to add a node after the tail node. Keeping this in mind there can be two cases:
+
+1. When tail != null
+
+This case deals with a non-empty linked list.
+Let us assume a Linked List [1 -> 2 -> 3 -> 4]. 
+The given list has head pointing to the node with value 1 and tail pointing at the node with value 4 and the size of the linked list is 4. 
+Now suppose we need to add a node 5 at the end of the linked list. 
+Now as we know that every node stores the address of its next node in a singly linked list,
+so it means that the node with value 1 stores the address of the node with value 2 and so on, 
+which also concludes that the node with value 4 stores null as there is no node ahead of it. 
+Therefore, all we need to do is to update the address of the tail (i.e. the node with value 4) to point to a new node 
+(i.e. the node with value 5) which makes our linked list [1 -> 2 -> 3 -> 4 -> 5]. 
+Now all that is left to do is to update the tail pointer to the node with value 5 and increment the size of the list.
+
+2. When tail == null
+
+This is the case of an empty linked list.
+This implies that both the head and the tail pointer points to null and the size of our linked list is 0. 
+So here we just need to add our new node to the list which will act as both head and tail 
+(as a list of size 1 has only one node with head and tail both pointing to that node) and we need to increment the size of the list.
+
+Time Complexity: O(1)
+The time complexity for this function is constant,
+since all we have to do is to update the tail pointer and increment the size of the list which has nothing to do with the number of elements present in the list.
+
+Had it been the case where we have not been provided with the tail pointer,then we would have to traverse the entire list to reach the end node of the list,
+which would take a time complexity proportional to the length of the list and then we would insert a node and increment the size, 
+so the total time complexity would have been O(n) in that case, where n is the length of the linked list.
+
+Space Complexity: O(1)
+As we only take a space to create a new node which is also independent of the length of the linked list.
+*/
 void addLast(int val) {
       Node temp = new Node();
       temp.data = val;
@@ -27,6 +97,20 @@ void addLast(int val) {
   }
 
 //display a LL
+/*
+The first function expects a return value equal to the size of the list. 
+As we already know that we have a size data member so here we just need to return it.
+The second function expects an output that displays the linked list. 
+To achieve this, we need to traverse the entire list to get every element and print its value, 
+for that we can take a temporary node starting from the head and incrementing itself until it becomes null, and for every node, we print the node data.
+
+Time Complexity
+The time complexity for the size() function is constant (or O(1)) since all we have to do is to return the data member size.
+The time complexity for the display() function is O(n) where n is the length of the list, as here we visit each node of the list which is dependent on the length of the list.
+
+Space Complexity: O(1)
+The space complexity for both the functions is constant.
+*/
 public void display(){
       Node temp = head;
       while(temp != null){
@@ -38,10 +122,42 @@ public void display(){
  }
 
 //Remove First in LL
-// You are required to complete the body of removeFirst function 
-//          removeFirst - This function is required to remove the first element from 
-//           Linked List. Also, if there is only one element, this should set head and tail to 
-//           null. If there are no elements, this should print "List is empty".
+/*
+You are required to complete the body of removeFirst function removeFirst - 
+This function is required to remove the first element from Linked List. 
+Also, if there is only one element, this should set head and tail to null. 
+If there are no elements, this should print "List is empty".
+
+To understand the problem better we need to understand the following cases:
+
+1. When size > 1
+This is the case when our list is not empty. 
+Say for example our list is 1 -> 2 - > 3 -> 4 -> 5 with head at node with value 1,tail at node with value 5 and size of list as 5.
+Now when we called our removeFirst() function it gives us an updated list 
+which looks like 2 -> 3 -> 4 -> 5 where head points at the node with value 2, tail points at the node with value 5, and size of the list become 4. 
+Now to achieve this we need to do two things, 
+firstly to update the head to its next node and 
+then decrement the size of the list.
+
+2. When size == 0
+This is the case when our list is empty. 
+As we can not remove an element from an empty list so in this case we just need to prompt an error message and return without changing the data members of the linked list class.
+
+3. When size == 1
+This is the case when our list has only one node. 
+Removing this node will result in an empty list. 
+As we know that for an empty list both head and tail point to null and the size is equal to zero, so we just need to update the data members in this case.
+
+Why Case 1 and Case 3 are different?
+They are different since for Case 3 we need to update the tail pointer too as deleting a list with one node results in an empty list
+whereas in Case 1 deleting the first node does not affect the last node, hence different.
+
+Time Complexity: O(1)
+The time complexity for the function is constant as only shifting of the head pointer is involved in the operation which is independent of the length of the linked list.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have not used any extra space for our algorithm.
+*/
 public void removeFirst(){
         if(size == 0) {
           System.out.println("List is empty");
@@ -57,7 +173,23 @@ public void removeFirst(){
     }
   }
 
-//get valur in LL
+//get value in LL
+/*
+Get First
+The problem deals with retrieving the first node data from the linked list. The problem can be in one of the two cases:
+
+1. Size != 0
+This implies that our list is not empty so in that case we simply need to return the data present at our head node.
+
+2. Size == 0
+This is the case when our list is empty which implies that there are no nodes in our list, in that case, we can not return any relevant data so we prompt an error message displaying "List is empty" and return -1 as a default value.
+
+Time Complexity: O(1)
+The time complexity for the function is constant as we only need to return the data present at our head node.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have not used any extra space for our algorithm.
+*/
 public int getFirst() {
       if (size == 0) {
         System.out.println("List is empty");
@@ -65,7 +197,25 @@ public int getFirst() {
       } else {
         return head.data;
       }
-    }
+}
+
+/*
+Get Last
+The problem deals with retrieving the last node data from the linked list. The problem can be in one of the two cases:
+
+1. Size != 0
+This implies that our list is not empty so in that case we simply need to return the data present at our tail node.
+
+2. Size == 0
+This is the case when our list is empty which implies that there are no nodes in our list, 
+in that case, we can not return any relevant data so we prompt an error message displaying "List is empty" and return -1 as a default value.
+
+Time Complexity: O(1)
+The time complexity for the function is constant as we only need to return the data present at our tail node.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have not used any extra space for our algorithm.
+*/
 
     public int getLast() {
       if (size == 0) {
@@ -76,6 +226,28 @@ public int getFirst() {
       }
     }
 
+/*
+Get At
+The problem deals with retrieving the node data at the desired index from the linked list. The problem can be in one of the cases:
+
+1. Size != 0 (General Case)
+This implies that our list is not empty so in that case, we need to traverse to the desired index and then return the value. 
+To achieve this we will take a temporary variable initialized with head pointer and then iterate it to reach the desired node and then return with the data at the current node.
+
+2. Size == 0
+This is the case when our list is empty which implies that there are no nodes in our list, 
+in that case, we can not return any relevant data so we prompt an error message displaying "List is empty" and return -1 as a default value.
+
+3. If index < 0 || index >= size
+This is the case when our input parameter is out of range as our index parameter can have values from 0 <= index < size to satisfy 0 based indexing in programming. 
+So in this case we will prompt an error message "Invalid Arguments." and return 1 as the default value.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as we are traversing over the linked list to reach the desired index which is dependent on the length of the linked list.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only used a temporary variable for our algorithm.
+*/
     public int getAt(int idx) {
       if (size == 0) {
         System.out.println("List is empty");
@@ -99,6 +271,27 @@ public int getFirst() {
     }
 
   //Add First in LL
+/*
+The problem can be categorized into two different cases:
+
+1. Size != 0
+This is the case when our list is not empty. 
+So we need to create a new node and store the input data, 
+now the next thing to keep in mind is that this new node will now act as the head of the linked list so the head should be updated, 
+also the new node should now point to the next node which was the previous head and lastly, the size of the list should be incremented.
+
+2. Size == 0
+This is the case when our list is empty.
+For that adding a new node to the list will make the length of the list as 1. 
+Now as we already know that for an empty list head = tail = null and size = 0, 
+so after adding the new node both head and tail should point to our new node and size should also be incremented.
+
+Time Complexity: O(1)
+The time complexity for the function is constant as the only operation include here is updation of data members.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only created a new node variable that takes constant space.
+*/
    public void addFirst(int val) {
 
       Node first = new Node();
@@ -113,6 +306,44 @@ public int getFirst() {
    }
 
 //Add at Index in LL
+/*
+The problem can be categorized into different cases:
+
+1. Index < 0 || Index > Size
+This is the case when our input parameter is out of range as our index parameter can have values from 0 <= index <= size
+(here, index == size is valid as we can add an element at the index == size which is equivalent to adding an element at the end of the list) 
+to satisfy 0 based indexing in programming. 
+So in this case we will prompt an error message "Invalid Arguments".
+
+2. Index == 0
+This is the case when we wish to add an element at the beginning of the linked list
+which can also be referred to as the addFirst() function which we discussed in the previous problem, 
+so here we simply call that function and return.
+
+3. Index == Size
+This is the case when we wish to add a node at the end of the linked list
+which can also be referred to as the addLast() function which we discussed in the previous problem, 
+so here we simply call that function and return.
+
+4. 0 <  Index< Size
+This is the general case for this problem as in this case the new node acquires the position in between the nodes of our linked list.
+As we wish to add the node at a particular index so we need to traverse the list until we reach the desired index and
+then we will have to insert the node which can be done by following these simple steps:
+a. Create a new node and update its data members (say newNode)
+b. Create a temporary reference pointing at the head (say curr)
+c. Traverse from head to the node before the desired index
+d. Save the next address in a variable (say saveNode)
+e. Update the next data member of curr to newNode
+f. Update the next data member of newNode to saveNode
+g. Return
+
+Time Complexity: O(n)
+The time complexity for the function is linear as we need to traverse the list to reach the desired location and then perform insertion, 
+which is dependent on the length of the linked list.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only created reference variables that take constant space.
+*/
 public void addAt(int idx, int val) {
   if (idx < 0 || idx > size) {
     System.out.println("Invalid arguments");
@@ -148,6 +379,31 @@ public void addAt(int idx, int val) {
 }
 
 //Remove last in LL
+/*
+1. When size == 0
+This is the case when our list is empty. 
+As we can not remove an element from an empty list
+so in this case we just need to prompt an error message and return without changing the data members of the linked list class.
+
+2. When size == 1
+This is the case when our list has only one node. 
+Removing this node will result in an empty list. 
+As we know that for an empty list both head and tail points to null and the size is equal to zero, 
+so we just need to update the data members in this case.
+
+3. When size > 1
+This is the general case of our problem. 
+Earlier in our removeFirst() problem we just update our head with head.next and we get our result, 
+but in a singly linked list there is no way to do something like this, tail = tail.prev so we need to go the traditional way, 
+i.e. by traversing the list up to the node before tail node and then set its next data member to null and 
+we also need to decrement the size of our list.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as the traversal of the linked list is involved.
+
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only used referenced variables in our algorithm.
+*/
 public void removeLast(){
       if(size == 0){
           System.out.println("List is empty");
@@ -166,6 +422,35 @@ public void removeLast(){
  }
 
 //Remove at Index in LL
+/*
+The problem can be categorized into the following cases:
+
+1. Index < 0 || Index >= Size
+This is the case when the input parameter is out of range, 
+as to follow 0 based indexing the index parameter should be in the range of )<= Index < Size which is clearly violated in this case. 
+So, here we would simply prompt an error message and return.
+
+2. Index == 0
+This is the case of removing the first element from the list which we have already implemented in previous lessons,
+hence here we could just call our removeFirst()  function and return.
+
+3. Index == Size - 1
+This is the case of removing the last element from the list which we have already implemented in previous lessons,
+hence here we could just call our removeLast()  function and return.
+
+4. 0 < Index < Size -1
+This is the general case of our problem where the element to be removed is present in between the elements of the list.
+To remove an element from the list, we need the node previous to it and the node next to the node to be deleted. 
+So here we can traverse the list till we reach the previous node and
+we can update the next data member of the previous node by pointing it to the next node of its next node 
+i.e., prevNode.next = prevNode.next.next(which is the same ascurrNode.nextwherecurrNodeis the node to be deleted).
+After updating the list all we need to do is to decrement the size of our list and then return.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as the traversal of the linked list is involved.
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only used referenced variables in our algorithm.
+*/
 public void removeAt(int idx) {
   if (idx < 0 || idx >= size) {
     System.out.println("Invalid arguments");
@@ -218,6 +503,30 @@ public void removeLast(){
  }
 
 //Reverse a LL (data iterative)
+/*
+The problem deals with reversing the given linked list, here we will use a data iterative approach, 
+i.e. instead of reversing the list, we will modify the elements of the list to get our result. 
+
+When we need to reverse a list, deep down what needed to be done is that the last node should be now the first node and the first node should now be the last node. 
+Similarly, the second node and the second last node should also be interchanged, and so on. 
+Now we will implement this approach on linked list data. 
+For that, we will keep a left index (say li) at 0 and a right index (say ri) at size - 1. 
+What we wish to do is to swap the elements at li and ri and update li and ri upto the point when li becomes equal to ri.
+
+Points to note here
+1. If we were to run the loop till end instead of till middle then at li == ri we would get our reverse list 
+but moving forward to end we would again have reversed our list and then we would have gotten the original unreversed list as our result.
+2. At li == ri we break the loop as swapping the data at same index changes nothing.
+3. Incrementing li means moving from the first node to the second then to the third and so on.
+4. Decrementing ri means moving from the last node to second last then to third last and so on.
+5. This incrementation and decrementation ensure that we swap correct pairs like the first node with last, the second node with second last, and so on.
+6. The actual time complexity is O(n/2) which is effectively equal to O(n).
+
+Time Complexity: O(n)
+The time complexity for the function is linear as we need to traverse the entire list to swap every element in the list.
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only used referenced variables in our algorithm.
+*/
 private Node getNodeAt(int idx) {
   Node temp = head;
 
@@ -243,6 +552,24 @@ public void reverseDI() {
 /*******************IMPORTANT*********************/
 //Reverse LL(Pointer Iterative); do DRY run to understand
 public void reversePI(){
+  /*
+The problem deals with reversing the given linked list, here we will use a pointer iterative approach,
+i.e. we will modify our list to reverse it and we would not change the node data. 
+There can be two ways to reverse a linked list:
+The difference in both these methods is that in the data iterative method we are not changing the linked list orientation,
+we were only replicating the output elements whereas in the pointer iterative approach we aim to redesign our list to reverse it.
+
+The idea behind the pointer iterative is to simply point all nodes to its previous nodes.
+This can be implemented by having two pointers, 
+one for storing the previous node and the other for storing the next node, 
+so that for every node the current node can point to the previous node and then can move forward to the next node. 
+The next node is needed to prevent data loss due to the reassignment of the next data member of the current node.
+
+Time Complexity: O(n)
+The time complexity for the function is linear as we need to traverse the entire list to change its orientation (or next data member re-allocation).
+Space Complexity: O(1)
+The space complexity for the function is constant as we have only used referenced variables in our algorithm.
+  */
         if(size == 0){
             return;
         }
@@ -270,23 +597,45 @@ public void reversePI(){
     "Stack underflow" and return -1.
     3.4. size -> Should return the number of elements available in the 
     stack
+
+A stack is a data structure just like a list but with restricted access. 
+Say for example we have a pile of books, 
+whenever we wish to add a book to the pile we do it at the top of the pile and 
+whenever we wish to remove a book from the pile, removing it from the top seems sensible.
+Here pile can be referred to as a stack and books can be referred to as elements.
+It is restricted in the sense that insertion (of elements) or deletion (of elements) can take place only at the top of the stack.
+Also, users can not access any other data (or node) except the topmost element. 
+This means that stack has a LIFO property (Last InFirst Out).
+
+The problem here deals with modifying a linked list to create a stack.
+Our task is to implement LLToStackAdapter class, so for that first,
+we need to have a list to store data, so our data member in this class would be a linked list.
 */
 public static class LLToStackAdapter {
     LinkedList<Integer> list;
-
+  
+/* As we know that every class has a constructor, here we will write our constructor which will initialize our list.*/
     public LLToStackAdapter() {
       list = new LinkedList<>();
     }
-
-
+/* size() function which returns the current size of our stack, for that we can simply use the in-built size() function of the LinkedList class and return it.*/  
     int size() {
       return list.size();
     }
-
+/*
+push() function which takes a single argument valwhich contains the element that needs to be added at the top of the stack. 
+For that, we simply add the element at the beginning of our list by using the in-build addFirst() function.
+*/
     void push(int val) {
       list.addFirst(val);
     }
-
+/*
+ pop() function whose task is to remove the element present at the top of the stack.
+ In our class we have considered the head node as the top of the stack, 
+ now we simply need to remove the node at the head of the linked list and 
+ we also need to handle the condition when our list is empty as we can not retrieve any information from an empty list.
+ Here updation of head and size are taken care of by the in-built LinkedList class we just need to use the functions to get relevant results.
+*/
     int pop() {
       if(size() ==0){
           System.out.println("Stack underflow");
@@ -294,7 +643,12 @@ public static class LLToStackAdapter {
       }
       return list.removeFirst();
     }
-
+/*
+ top() function whose task is to return the element present at the top of the stack. 
+ In our class we have considered head as the top of the stack,
+ now we simply need to return the data present at the head of the linked list and 
+ we also need to handle the condition when our list is empty as we can not retrieve any information from an empty list.
+*/
     int top() {
         if(size() ==0){
           System.out.println("Stack underflow");
@@ -303,7 +657,8 @@ public static class LLToStackAdapter {
       return list.getFirst();
     }
   }
-
+/* Time Complexity: O(1)
+The time complexity for every function in our class is linear as the operations involved here are only on the head node and not on the entire list.*/
 
 //Linked List To Queue Adapter
 /*
@@ -315,6 +670,17 @@ public static class LLToStackAdapter {
      3.3. peek -> Should return data in FIFO manner. If not available, print "Queue 
      underflow" and return -1.
      3.4. size -> Should return the number of elements available in the queue
+
+A queue is a data structure just like a list but with restricted access. 
+Say for example we have a queue of customers at a shop, here the first person who comes in gets out first and the later ones follow. 
+This representation is similar to the queue data structure wherein an element is inserted at the end of the list and removed from the beginning. 
+It is restricted in the sense that insertion (of elements) or deletion (of elements) can take place only at the specific positions. 
+Also, users can not access any other elements (or nodes) except the frontmost element.
+This means that the queue has a FIFO property (FirstIn First Out).
+
+The problem here deals with modifying a linked list to create a queue.
+Our task is to implement LLToQueueAdapter class, so for that first, 
+we need to have a list to store data, so our data member in this class would be a linked list.
 */
 public static class LLToQueueAdapter {
     LinkedList<Integer> list;
@@ -322,15 +688,21 @@ public static class LLToQueueAdapter {
     public LLToQueueAdapter() {
       list = new LinkedList<>();
     }
-
+/* size() function which returns the current size of our queue, for that we can simply use the in-built size() function of the LinkedList class and return it.*/
     int size() {
       return list.size();
     }
-
+/* add() function which takes a single argument valwhich contains the element that needs to be added at the end of the queue. 
+   For that, we simply add the element at the end of our list by using the in-build addLast() function.*/
     void add(int val) {
       list.addLast(val);
     }
-
+/*
+remove() function whose task is to remove the element present at the front of the queue. 
+In our class we have considered the head node as the front of the queue, 
+now we simply need to remove the node at the head of the linked list and 
+we also need to handle the condition when our list is empty as we can not retrieve any information from an empty list.
+*/
     int remove() {
       if(size() == 0){
           System.out.println("Queue underflow");
@@ -338,7 +710,11 @@ public static class LLToQueueAdapter {
       }
       return list.removeFirst();
     }
-
+/*
+The next function is the peek() function whose task is to return the element present at the front of the queue. 
+We simply need to return the data present at the head of the linked list and
+we also need to handle the condition when our list is empty as we can not retrieve any information from an empty list.
+*/
     int peek() {
       if(size() == 0){
           System.out.println("Queue underflow");
@@ -347,6 +723,11 @@ public static class LLToQueueAdapter {
       return list.getFirst();
     }
   }
+/*
+Time Complexity: O(1)
+The time complexity for every function in our class is linear as
+the operations involved here are insertion at the tail, removal at head, size incrementation or decrementation which are all constant operations.
+*/
 
 //Kth Node From End Of Linked List
 /*
@@ -354,6 +735,10 @@ You are required to complete the body of kthFromLast function.
 The function should be an iterative function and should return the kth node from end of linked list. 
 Also, make sure to not use size data member directly or indirectly (by calculating size via making a traversal). 
 k is a 0-based index. Assume that valid values of k will be passed.
+
+
+
+
 */
 public int kthFromLast(int k) {
   Node fast = head;//first pointer
